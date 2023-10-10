@@ -11,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-          <MySessionProvider component={Navbar()}/>
+          <MySessionProvider>
+            <Navbar/>
+          </MySessionProvider>
           {children}
       </body>
     </html>
