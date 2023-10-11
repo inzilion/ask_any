@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Auth from "./auth";
+import AuthButton from "./authButton";
 
 export default function Navbar(){
   const menuItemClassName = "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium";
@@ -26,9 +26,9 @@ export default function Navbar(){
   return(
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <div className="hidden md:block">
+        <div className="hidden md:block ">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center">
               <div className="ml-10 flex items-baseline space-x-4">
                 {
                   menuItems.map((menuItem, i) => 
@@ -38,24 +38,21 @@ export default function Navbar(){
                   )
                 }
               </div>
-          
             </div>
-          
+            <AuthButton/> 
           </div>
-          <div className="md:hidden" id="mobile-menu">
-        <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-        {
-          menuItems.map((menuItem, i) => 
-            <Link href={menuItem.href} className={menuItem.isMobile(true)} key={i}>
-              {menuItem.name}  
-            </Link>
-          )
-        }
-        </div>
-      </div>
-
-
-          <Auth/>
+        </div>  
+        <div className="md:hidden">
+          <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+          {
+            menuItems.map((menuItem, i) => 
+              <Link href={menuItem.href} className={menuItem.isMobile(true)} key={i}>
+                {menuItem.name}  
+              </Link>
+            )
+          }
+          </div>
+          <AuthButton/>
         </div>
       </div>
     </nav>
