@@ -36,7 +36,7 @@ export default function AuthButton(){
         <div className="ml-4 flex items-center md:ml-6">
         { !session ?
           <div 
-            className="relative flex items-center cursor-pointer "
+            className="cursor-pointer text-gray-300 hover:text-white -md px-3 py-2 text-sm font-medium"
             onClick={()=>signIn()}
           >
             Sign In
@@ -50,7 +50,7 @@ export default function AuthButton(){
             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               { 
                 menuItems.map((item, i)=>
-                  <Menu.Item>
+                  <Menu.Item key={i}>
                     {({active})=><a href={item.href} className={item.isMobile(false)} onClick={item.handler}>{item.name}</a>}  
                   </Menu.Item>
                 )
@@ -61,11 +61,11 @@ export default function AuthButton(){
         </div>
       </div>
       
-      <div className="md:hidden">
+      <div className="md:hidden pb-3 pt-4">
         {
           !session ? 
           <span 
-            className="cursor-pointer text-gray-300 hover:text-white -md px-3 py-2 text-sm font-medium"
+            className="cursor-pointer text-gray-300  hover:text-white -md px-3 py-3 font-medium"
             onClick={()=>signIn()}
           >
             Sign In
@@ -79,7 +79,7 @@ export default function AuthButton(){
             <Menu.Items className="mt-3 space-y-1 px-2">
             { 
               menuItems.map((item, i)=>
-                <Menu.Item>
+                <Menu.Item key={i}>
                   {({active})=><a href={item.href} className={item.isMobile(true)} onClick={item.handler}>{item.name}</a>}  
                 </Menu.Item>
               )
