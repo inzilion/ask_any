@@ -13,8 +13,8 @@ export default function RootLayout({ children }) {
       <body>
           <MySessionProvider>
             <Navbar/>
+            {children}
           </MySessionProvider>
-          {children}
       </body>
     </html>
   )
