@@ -4,33 +4,40 @@ import Selection from "@/components/selection";
 import AddOption from "@/components/addOption";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { EnvelopeOpenIcon } from "@heroicons/react/20/solid";
+
+const data = {
+  date: dayjs().toString(),
+  author: null,
+  level: "상",
+  category: "상식",
+  type: "선택형",
+  title: "",
+  description: "",
+  image:"",
+  options: [
+    {
+      isTrue: false,
+      content: '보기1',
+    },
+    {
+      isTrue: true,
+      content: '보기2',
+    },
+  ],
+}
+
 
 export default function Create(){
   const { data: session } = useSession();
-  const data = {
-    date: dayjs().toString(),
-    author: session?.user,
-    level: "상",
-    category: "상식",
-    type: "선택형",
-    title: "",
-    description: "",
-    image:"",
-    options: [
-      {
-        isTrue: false,
-        content: '보기1',
-      },
-      {
-        isTrue: true,
-        content: '보기2',
-      },
-    ],
-  }
+  data.author = session;
+  const [ problemData, setProblemData ] = useState(data);
+  const [ optionContent, setOptionContent] = useState('');
+  const optionContentRef = useRef();
 
-  const [ problemData, setProblemData ] = useState(data)
-
+  const changeOptionContent = (e) => setOptionContent(e.target.value);
+  
   const changeState = (e) => {
     if(e.target.id === 'image'){
       const file = e.target.files[0];
@@ -42,10 +49,18 @@ export default function Create(){
       }
       return;
     }
+    if(e.target.id === 'addOption'){
+      data.options.push({isTrue: false, content: optionContent});
+      optionContentRef.current.value = "";
+      optionContentRef.current.focus();
+      setProblemData(data);
+      return;
+    }
     data[e.target.id] = e.target.value;
     setProblemData(data);
-    console.log(problemData);
+    console.log(optionContentRef.current.value);
   }
+
 
   const selectionData = {
     level: {
@@ -97,7 +112,11 @@ export default function Create(){
         </div>
         <div>
           <Options options={problemData.options}/>
-          <AddOption/>
+          <AddOption 
+            Ref={optionContentRef}
+            changeOptionContent={changeOptionContent}
+            changeState={changeState}
+          />
         </div>
       </div>        
     </div>
