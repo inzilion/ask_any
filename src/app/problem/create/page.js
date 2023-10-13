@@ -1,14 +1,13 @@
 'use client'
 import dayjs from "@/util/myDay";
 import Selection from "@/components/selection";
-import AddOption from "@/components/addOption";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 export default function Create(){
   const { data: session } = useSession();
-  const data = {
+  const mockData = {
     date: dayjs().toString(),
     author: session?.user,
     category: "상식",
@@ -17,16 +16,7 @@ export default function Create(){
     title: "",
     description: "",
     image:"",
-    options: [
-      {
-        isTrue: false,
-        content: '보기1',
-      },
-      {
-        isTrue: true,
-        content: '보기2',
-      },
-    ],
+    options: [],
   }
   
   const [ problemData, setProblemData ] = useState(data);
@@ -35,26 +25,33 @@ export default function Create(){
 
   const changeOptionContent = (e) => setOptionContent(e.target.value);
   
+  const changeStateMap = {
+    image(copy,e){
+      const file = e.target.files[0];
+      const reader = new FileReader(file);
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        copy.image = reader.result;
+        setProblemData(copy);
+      }
+    },
+    addOption(copy){
+      copy.options.push({isTrue: false, content: optionContent});
+      optionContentRef.current.value = "";
+      optionContentRef.current.focus();
+      setProblemData(copy);
+    }
+  }
+
   const changeState = (e) => {
     const copy = {...problemData}
-    
-    switch (e.target.id){
-      case 'image': 
-        const file = e.target.files[0];
-        const reader = new FileReader(file);
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          copy.image = reader.result;
-        };
-        break;
-      case "addOption":
-        copy.options.push({isTrue: false, content: optionContent});
-        optionContentRef.current.value = "";
-        optionContentRef.current.focus();
-        break;
-      default : copy[e.target.id] = e.target.value;
-    }    
-    setProblemData(copy);
+
+    try {
+      changeStateMap[e.target.id](copy,e);
+    } catch {
+      copy[e.target.id] = e.target.value;
+      setProblemData(copy);
+    }
   }
 
   const selectionData = {
@@ -77,15 +74,13 @@ export default function Create(){
     }
   }
 
-  useEffect(()=>{},[problemData])
-
   return(
     <div>
       <div className="m-5 flex gap-4 flex-col">
-        <div className="flex justify-between ">
-          <Selection {...selectionData.category}/>
-          <Selection {...selectionData.level}/>
-          <Selection {...selectionData.type}/>
+        <div className="flex-col flex gap-2 justify-between">
+          <Selection content="분야" {...selectionData.category}/>
+          <Selection content="난이도" {...selectionData.level}/>
+          <Selection content="문제유형" {...selectionData.type}/>
         </div>
         <div>
           <input
@@ -103,13 +98,14 @@ export default function Create(){
           >
           </textarea>
         </div>
-        <div>
-          <img src={problemData.image}/>
-          <input id="image" type="file" onChange={changeState}/>
+        <div className='flex-col grid justify-items-center gap-2'>
+          <img src={problemData.image} width="50%"/>
+          <input id="image" type="file" onChange={changeState} className='hidden'/>
+          <label htmlFor="image" className='bg-blue-900 text-white hover:bg-blue-500 hover:text-white rounded-md px-3 py-2 text-sm font-medium'>이미지 파일 선택</label>
         </div>
         <div>
-          <Options options={problemData.options}/>
-          <AddOption 
+          <Options 
+            options={problemData.options}
             Ref={optionContentRef}
             changeOptionContent={changeOptionContent}
             changeState={changeState}
