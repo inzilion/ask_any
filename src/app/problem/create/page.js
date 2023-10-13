@@ -4,34 +4,31 @@ import Selection from "@/components/selection";
 import AddOption from "@/components/addOption";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
-import { EnvelopeOpenIcon } from "@heroicons/react/20/solid";
-
-const data = {
-  date: dayjs().toString(),
-  author: null,
-  level: "상",
-  category: "상식",
-  type: "선택형",
-  title: "",
-  description: "",
-  image:"",
-  options: [
-    {
-      isTrue: false,
-      content: '보기1',
-    },
-    {
-      isTrue: true,
-      content: '보기2',
-    },
-  ],
-}
-
+import { useState, useRef, useEffect } from "react";
 
 export default function Create(){
   const { data: session } = useSession();
-  data.author = session;
+  const data = {
+    date: dayjs().toString(),
+    author: session?.user,
+    category: "상식",
+    level: "상",
+    type: "선택형",
+    title: "",
+    description: "",
+    image:"",
+    options: [
+      {
+        isTrue: false,
+        content: '보기1',
+      },
+      {
+        isTrue: true,
+        content: '보기2',
+      },
+    ],
+  }
+  
   const [ problemData, setProblemData ] = useState(data);
   const [ optionContent, setOptionContent] = useState('');
   const optionContentRef = useRef();
@@ -39,28 +36,26 @@ export default function Create(){
   const changeOptionContent = (e) => setOptionContent(e.target.value);
   
   const changeState = (e) => {
-    if(e.target.id === 'image'){
-      const file = e.target.files[0];
-      const reader = new FileReader(file);
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        data.image = reader.result;
-        setProblemData(data);    
-      }
-      return;
-    }
-    if(e.target.id === 'addOption'){
-      data.options.push({isTrue: false, content: optionContent});
-      optionContentRef.current.value = "";
-      optionContentRef.current.focus();
-      setProblemData(data);
-      return;
-    }
-    data[e.target.id] = e.target.value;
-    setProblemData(data);
-    console.log(optionContentRef.current.value);
+    const copy = {...problemData}
+    
+    switch (e.target.id){
+      case 'image': 
+        const file = e.target.files[0];
+        const reader = new FileReader(file);
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          copy.image = reader.result;
+        };
+        break;
+      case "addOption":
+        copy.options.push({isTrue: false, content: optionContent});
+        optionContentRef.current.value = "";
+        optionContentRef.current.focus();
+        break;
+      default : copy[e.target.id] = e.target.value;
+    }    
+    setProblemData(copy);
   }
-
 
   const selectionData = {
     level: {
@@ -81,6 +76,8 @@ export default function Create(){
       handler: changeState,
     }
   }
+
+  useEffect(()=>{},[problemData])
 
   return(
     <div>
