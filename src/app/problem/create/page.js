@@ -19,14 +19,14 @@ export default function Create(){
     options: [],
   }
   
-  const [ problemData, setProblemData ] = useState(data);
+  const [ problemData, setProblemData ] = useState(mockData);
   const [ optionContent, setOptionContent] = useState('');
   const optionContentRef = useRef();
 
   const changeOptionContent = (e) => setOptionContent(e.target.value);
   
   const changeStateMap = {
-    image(copy,e){
+    image: (copy, e) => {
       const file = e.target.files[0];
       const reader = new FileReader(file);
       reader.readAsDataURL(file);
@@ -35,22 +35,26 @@ export default function Create(){
         setProblemData(copy);
       }
     },
-    addOption(copy){
+    addOption: (copy) => {
       copy.options.push({isTrue: false, content: optionContent});
       optionContentRef.current.value = "";
       optionContentRef.current.focus();
       setProblemData(copy);
+    },
+    removeOption: (copy, e, idx) => {
+      copy.options.splice(idx,1)
+      setProblemData(copy);
     }
   }
 
-  const changeState = (e) => {
-    const copy = {...problemData}
+  const changeState = (e, idx) => {
+    const copyData = {...problemData}
 
     try {
-      changeStateMap[e.target.id](copy,e);
+      changeStateMap[e.target.id](copyData, e, idx);
     } catch {
-      copy[e.target.id] = e.target.value;
-      setProblemData(copy);
+      copyData[e.target.id] = e.target.value;
+      setProblemData(copyData);
     }
   }
 
@@ -104,12 +108,15 @@ export default function Create(){
           <label htmlFor="image" className='bg-blue-900 text-white hover:bg-blue-500 hover:text-white rounded-md px-3 py-2 text-sm font-medium'>이미지 파일 선택</label>
         </div>
         <div>
-          <Options 
-            options={problemData.options}
-            Ref={optionContentRef}
-            changeOptionContent={changeOptionContent}
-            changeState={changeState}
-          />
+          {problemData.type ==="선택형" ?
+            <Options 
+              options={problemData.options}
+              Ref={optionContentRef}
+              changeOptionContent={changeOptionContent}
+              changeState={changeState}
+            />
+            : ""
+          }
         </div>
       </div>        
     </div>
