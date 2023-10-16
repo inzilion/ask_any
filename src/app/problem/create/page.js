@@ -4,23 +4,22 @@ import Selection from "@/components/selection";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
-import { ArrowLeftCircleIcon } from '@heroicons/react/20/solid';
 import Modal from '@/components/modal';
+
+const mockData = {
+  date: dayjs().toString(),
+  category: "상식",
+  level: "상",
+  type: "선택형",
+  title: "",
+  description: "",
+  image:"",
+  options: [],
+}
 
 export default function Create(){
   const { data: session } = useSession();
-  const mockData = {
-    date: dayjs().toString(),
-    author: session?.user,
-    category: "상식",
-    level: "상",
-    type: "선택형",
-    title: "",
-    description: "",
-    image:"",
-    options: [],
-  }
-  
+  mockData.author = session?.user;    
   const [ problemData, setProblemData ] = useState(mockData);
   const [ optionContent, setOptionContent] = useState('');
   const optionContentRef = useRef();
@@ -38,15 +37,24 @@ export default function Create(){
       }
     },
     addOption: (copy) => {
-      copy.options.push({isTrue: false, content: optionContent});
+      if(optionContentRef.current.value){
+        copy.options.push({isTrue: false, content: optionContent});
+        setProblemData(copy);
+      }
       optionContentRef.current.value = "";
       optionContentRef.current.focus();
-      setProblemData(copy);
     },
     removeOption: (copy, e, idx) => {
       copy.options.splice(idx,1)
       setProblemData(copy);
-    }
+    },
+    option: (copy, e, idx) => {
+      copy.options[idx] = {
+        isTrue: e.target.checked,
+        content: copy.options[idx].content,
+      }
+      setProblemData(copy);
+    },
   }
 
   const changeState = (e, idx) => {
@@ -90,6 +98,14 @@ export default function Create(){
       return;
     }
     
+    if(!problemData.options.filter((e)=>e.isTrue===true).length){
+      setModal(
+        <Modal title={"정답에러"} content={"정답이 없습니다."} btnLabel={ "확인"} />
+      );
+      setTimeout(()=>setModal(''), 5000);
+      return;
+    }
+
     fetch('/api/problem/create', {
       method: 'POST',
       body: JSON.stringify(problemData),
@@ -99,6 +115,7 @@ export default function Create(){
       setModal(<Modal title={"등록완료"} content={"문제 등록이 완료되었습니다."} btnLabel={ "확인"} />);
       setTimeout(()=>setModal(''), 5000);
     });
+    setProblemData(mockData);
   }
   
   if(!session) return <Modal title={"로그인"} content={"로그인이 필요합니다."} btnLabel={ "확인"} />

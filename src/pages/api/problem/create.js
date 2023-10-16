@@ -13,7 +13,7 @@ export default async function handler(req, res){
   const db = await client.db('ASK_ANY')
   const result = await db.collection('PROBLEMS').insertOne({...data})
   const file = result.insertedId.toString();
-  const path = `_imgData/${file}.txt`;
+  const path = `src/_imgData/${file}.txt`;
   fs.writeFile(path, copyImgStr, (err)=>console.log(err));
 
   const finalResult = await db.collection("PROBLEMS").updateOne(
