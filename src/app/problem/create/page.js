@@ -79,11 +79,27 @@ export default function Create(){
       handler: changeState,
     }
   }
+
+
+  const [modal, setModal] = useState('');
+  const createProblem = () => {
+    if (!(problemData.title && problemData.description && problemData.options.length)){
+      setModal(
+        <Modal title={"문제등록에러"} content={"제목 또는 설명 또는 보기가 비어있습니다."} btnLabel={ "확인"} />
+      );
+      setTimeout(()=>setModal(''), 5000)
+    }
+      
+
+  //problemData 서버로 전송
+
+  }
   
   if(!session) return <Modal title={"로그인"} content={"로그인이 필요합니다."} btnLabel={ "확인"} />
 
   return(
     <div>
+      {modal}
       <div className="m-5 flex gap-4 flex-col">
         <div className="flex-col flex gap-2 justify-between">
           <Selection content="분야" {...selectionData.category}/>
@@ -94,15 +110,16 @@ export default function Create(){
           <input
             id='title'
             placeholder="제목을 입력하세요"
-            className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={(e)=>changeState(e)}
           />
         </div>
         <div>
           <textarea
             id="description" 
-            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={(e)=>changeState(e)}
+            placeholder="문제 설명을 입력하세요"
           >
           </textarea>
         </div>
@@ -124,7 +141,7 @@ export default function Create(){
         </div>
         <button
           type="button"
-          onClick={()=>{}}
+          onClick={createProblem}
           className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           문제 등록
