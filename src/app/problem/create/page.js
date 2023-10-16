@@ -4,6 +4,8 @@ import Selection from "@/components/selection";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
+import { ArrowLeftCircleIcon } from '@heroicons/react/20/solid';
+import Modal from '@/components/modal';
 
 export default function Create(){
   const { data: session } = useSession();
@@ -77,6 +79,8 @@ export default function Create(){
       handler: changeState,
     }
   }
+  
+  if(!session) return <Modal title={"로그인"} content={"로그인이 필요합니다."} btnLabel={ "확인"} />
 
   return(
     <div>
@@ -118,6 +122,13 @@ export default function Create(){
             : ""
           }
         </div>
+        <button
+          type="button"
+          onClick={()=>{}}
+          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        >
+          문제 등록
+        </button>
       </div>        
     </div>
   )
