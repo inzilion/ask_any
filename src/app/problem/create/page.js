@@ -80,19 +80,25 @@ export default function Create(){
     }
   }
 
-
   const [modal, setModal] = useState('');
   const createProblem = () => {
     if (!(problemData.title && problemData.description && problemData.options.length)){
       setModal(
         <Modal title={"문제등록에러"} content={"제목 또는 설명 또는 보기가 비어있습니다."} btnLabel={ "확인"} />
       );
-      setTimeout(()=>setModal(''), 5000)
+      setTimeout(()=>setModal(''), 5000);
+      return;
     }
-      
-
-  //problemData 서버로 전송
-
+    
+    fetch('/api/problem/create', {
+      method: 'POST',
+      body: JSON.stringify(problemData),
+    })
+    .then(res=>res.json())
+    .then(json=>{
+      setModal(<Modal title={"등록완료"} content={"문제 등록이 완료되었습니다."} btnLabel={ "확인"} />);
+      setTimeout(()=>setModal(''), 5000);
+    });
   }
   
   if(!session) return <Modal title={"로그인"} content={"로그인이 필요합니다."} btnLabel={ "확인"} />

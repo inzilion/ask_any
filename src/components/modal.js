@@ -63,7 +63,6 @@ export default function Modal({title, content, btnLabel}) {
                       {content}
                     </p>
                   </div>
-
                   <div className="mt-4">
                     <button
                       type="button"
