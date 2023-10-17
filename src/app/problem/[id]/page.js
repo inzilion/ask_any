@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 export default function Id({params}){
-  const [ problemData, setProblemData ] = useState('');
+  const [ problemData, setProblemData ] = useState({});
   const [ userOptions, setUserOptions ] = useState([]);
   
   useEffect(()=>{
@@ -15,23 +15,26 @@ export default function Id({params}){
     .then(res=>res.json())
     .then(result=>{
       const data = JSON.parse(result);
-      const copy = [...data.options];
-      setProblemData(data)
-      setUserOptions(copy.map(e=>{e.isTrue="false"; return e}))
-      console.log(userOptions);
+      let copy = JSON.parse(JSON.stringify([...data.options]));
+      setUserOptions(copy.map(e=>{e.isTrue=false; return e}));
+      setProblemData(data);
     })
 
   }, [])
   
   const setUserOptionsHandler = (e, i) => {
-    console.log("called");
     const copy = [...userOptions];
-    copy[i].isTrue = e.target.value;
+    copy[i].isTrue = e.target.checked;
     setUserOptions(copy);
-    //console.log(copy);
   }
 
-  const checkUserOptions = () => {}
+  const checkUserOptions = () => {
+    const result = problemData.options.filter((e, i)=> e.isTrue !== userOptions[i].isTrue);
+    if (result.length)
+      alert("오답");
+    else
+      alert("정답");
+  }
 
   return(
     <div className="flex flex-col gap-1">
@@ -41,12 +44,12 @@ export default function Id({params}){
         {problemData.image ? <img className="w-1/2" src={problemData.image}/> : ""}
       </div>
       <div className="flex-col flex gap-2 bg-blue-100 p-3">
-        {userOptions?.map((e, i)=>
+        {userOptions.map((e, i)=>
           <div key={i} className="flex gap-2">
             <div>
               <input 
                 type="checkbox"
-                onChange={(e, i)=>{setUserOptionsHandler(e, i)}}
+                onChange={(e)=>{setUserOptionsHandler(e, i)}}
               />
             </div>
             <div>
