@@ -3,7 +3,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
-export default function Modal({title, content, btnLabel}) {
+export default function Modal({contents}) {
   let [isOpen, setIsOpen] = useState(true)
 
   function closeModal() {
@@ -56,11 +56,11 @@ export default function Modal({title, content, btnLabel}) {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    {title}
+                    {contents.title}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      {content}
+                      {contents.description}
                     </p>
                   </div>
                   <div className="mt-4">
@@ -69,7 +69,7 @@ export default function Modal({title, content, btnLabel}) {
                       className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
-                      {btnLabel}
+                      {contents.btnLabel}
                     </button>
                   </div>
                 </Dialog.Panel>

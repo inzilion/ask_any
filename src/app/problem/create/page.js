@@ -92,7 +92,11 @@ export default function Create(){
   const createProblem = () => {
     if (!(problemData.title && problemData.description && problemData.options.length)){
       setModal(
-        <Modal title={"문제등록에러"} content={"제목 또는 설명 또는 보기가 비어있습니다."} btnLabel={ "확인"} />
+        <Modal contents={{ 
+          title:"문제등록에러", 
+          description: "제목 또는 설명 또는 보기가 비어있습니다.",
+          btnLabel: "확인"}}
+        />
       );
       setTimeout(()=>setModal(''), 5000);
       return;
@@ -100,7 +104,11 @@ export default function Create(){
     
     if(!problemData.options.filter((e)=>e.isTrue===true).length){
       setModal(
-        <Modal title={"정답에러"} content={"정답이 없습니다."} btnLabel={ "확인"} />
+        <Modal contents={{ 
+          title:"정답에러", 
+          description: "정답이 없습니다.",
+          btnLabel: "확인"}}
+        />
       );
       setTimeout(()=>setModal(''), 5000);
       return;
@@ -112,13 +120,25 @@ export default function Create(){
     })
     .then(res=>res.json())
     .then(json=>{
-      setModal(<Modal title={"등록완료"} content={"문제 등록이 완료되었습니다."} btnLabel={ "확인"} />);
+      setModal(
+        <Modal contents={{ 
+          title:"등록완료", 
+          description: "문제 등록이 완료되었습니다.",
+          btnLabel: "확인"}}
+        />
+      );
       setTimeout(()=>setModal(''), 5000);
     });
     setProblemData(mockData);
   }
   
-  if(!session) return <Modal title={"로그인"} content={"로그인이 필요합니다."} btnLabel={ "확인"} />
+  if(!session) 
+    return 
+      <Modal contents={{ 
+        title:"로그인에러", 
+        description: "로그인이 필요합니다..",
+        btnLabel: "확인"}}
+      />
 
   return(
     <div>
