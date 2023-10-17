@@ -8,3 +8,10 @@ body {
   margin: 0 auto;
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: "skybori";
+  src: url("/fonts/SKYBORI.ttf");
+  font-weight: normal;
+  font-style: normal;
+}

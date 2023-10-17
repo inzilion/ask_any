@@ -5,8 +5,8 @@ export default async function List(){
   return(
     <>
       <ul className="divide-y divide-gray-100 pl-3">
-        {list.map((item) => (
-          <li key={item.author?.email} className="flex justify-between gap-x-6 py-5">
+        {list.map((item, i) => (
+          <li key={i} className="flex justify-between gap-x-6 py-5">
             <div className="flex min-w-0 gap-x-4">
               <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={item.author?.image} alt="" />
               <div className="min-w-0 flex-auto">
