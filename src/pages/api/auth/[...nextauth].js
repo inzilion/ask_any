@@ -14,7 +14,31 @@ export const authOptions = {
     }),
     // ...add more providers here
   ],
-  secret: process.env.AUTH_SECRET
+  
+  secret: process.env.AUTH_SECRET,
+
+  callbacks: {
+ //   async signIn()
+
+    // async jwt({ token, account, profile }) {
+      
+    //   if (account) {
+    //     token.accessToken = account.access_token
+    //     token.id = profile.id
+    //   }
+    //   return token
+    // },
+    
+    async session({ session, token }){
+      console.log(session)
+      if(!session.rightList) session.rightList = [];
+      session.rightList.push(1);
+      console.log(token);
+      
+    return session;
+  } 
+
+  }
 }
 
 export default NextAuth(authOptions)

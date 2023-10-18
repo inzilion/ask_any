@@ -5,6 +5,7 @@ import { Menu } from '@headlessui/react';
 
 export default function AuthButton(){
   const { data: session } = useSession();
+  console.log(session);
   const menuItemClassName = "block px-4 py-2 text-sm text-gray-700";
   const menuItemClassNameMobile = "block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
   const isMobile = (isTrue) => isTrue ? menuItemClassNameMobile : menuItemClassName ;
