@@ -29,15 +29,9 @@ export const authOptions = {
     //   return token
     // },
     
-    async session({ session, token }){
-      console.log(session)
-      if(!session.rightList) session.rightList = [];
-      session.rightList.push(1);
-      console.log(token);
+    // async session({ session, token }){
       
-    return session;
-  } 
-
+    // return session;
   }
 }
 

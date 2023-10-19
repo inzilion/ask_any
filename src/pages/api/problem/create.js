@@ -14,7 +14,9 @@ export default async function handler(req, res){
   const result = await db.collection('PROBLEMS').insertOne({...data})
   const file = result.insertedId.toString();
   const path = `src/_imgData/${file}.txt`;
-  fs.writeFile(path, copyImgStr, (err)=>console.log(err));
+  
+  if(copyImgStr)
+    fs.writeFile(path, copyImgStr, (err)=>console.log(err));
 
   const finalResult = await db.collection("PROBLEMS").updateOne(
     {_id: result.insertedId},

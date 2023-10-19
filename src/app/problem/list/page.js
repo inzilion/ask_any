@@ -1,7 +1,8 @@
 import client from "@/util/database"
 export default async function List(){
   const db = await client.db("ASK_ANY");
-  const list = await db.collection("PROBLEMS").find().toArray();
+  const list = await db.collection("PROBLEMS").find({}, {author:1, countRight:1, countTry:1}).toArray();
+  console.log(list);
   return(
     <>
       <ul className="divide-y divide-gray-100 p-3">
