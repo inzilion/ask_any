@@ -5,6 +5,7 @@ import Modal from "@/components/modal";
 
 export default function Id({params}){
   const [ problemData, setProblemData ] = useState({});
+  const [ userData, setUserData ] = useState({});
   const [ userOptions, setUserOptions ] = useState([]);
   const [ modal, setModal ] = useState('');
   
@@ -17,9 +18,10 @@ export default function Id({params}){
     .then(res=>res.json())
     .then(result=>{
       const data = JSON.parse(result);
-      let copy = JSON.parse(JSON.stringify([...data.options]));
+      let copy = JSON.parse(JSON.stringify([...data.problemData.options]));
       setUserOptions(copy.map(e=>{e.isTrue=false; return e}));
-      setProblemData(data);
+      setProblemData(data.problemData);
+      setUserData(data.userData);
     })
 
   }, [])
@@ -52,6 +54,7 @@ export default function Id({params}){
   return(
     <div className="flex flex-col gap-1">
       {modal}
+      { userData.problems[params.id] ? <div>이미 문제를 해결하셨습니다.</div> : ""}
       <div className="bg-blue-100 p-5 text-black-100">{problemData.title}</div>
       <div className="bg-blue-100 p-5">{problemData.description}</div>
       <div className="flex justify-center">

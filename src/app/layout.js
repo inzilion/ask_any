@@ -1,6 +1,9 @@
 import Navbar from '@/components/navbar'
 import './globals.css'
 import MySessionProvider from './mySessionProvider'
+import "@fortawesome/fontawesome-svg-core/styles.css"
+import { config } from "@fortawesome/fontawesome-svg-core"
+config.autoAddCss = false;
 
 export const metadata = {
   title: 'Ask Any',
