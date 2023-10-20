@@ -84,7 +84,7 @@ export default function Create(){
 
     type: {
       id: 'type',
-      options: ['선택형', '단답형', '서술형'],
+      options: ['선택형', '단답형(개발중)', '서술형(개발중)'],
       handler: changeState,
     }
   }
