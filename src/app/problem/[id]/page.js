@@ -1,14 +1,15 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/modal";
 
 export default function Id({params}){
   const [ problemData, setProblemData ] = useState({});
-  const [ userData, setUserData ] = useState({});
+  const [ userData, setUserData ] = useState('');
   const [ userOptions, setUserOptions ] = useState([]);
   const [ modal, setModal ] = useState('');
-  
+  const sendBtnRef = useRef();
+
   useEffect(()=>{
     fetch('/api/problem/get',
     {
@@ -54,7 +55,18 @@ export default function Id({params}){
   return(
     <div className="flex flex-col gap-1">
       {modal}
-      { userData.problems[params.id] ? <div>이미 문제를 해결하셨습니다.</div> : ""}
+      { userData ? (
+        userData.problems[params.id].isSolved ? 
+          <div className='flex justify-center p-3 items-center gap-3'>
+            <p>이미 문제를 해결하셨습니다.</p>
+            <button 
+              className='rounded-md bg-lime-300 px-4 py-2 text-sm font-medium text-black  hover:bg-lime-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+              onClick={()=>{setUserOptions(problemData.options); sendBtnRef.current.className="hidden";}}
+            >
+              정답보기
+            </button>
+          </div> : ""
+        ): ""}
       <div className="bg-blue-100 p-5 text-black-100">{problemData.title}</div>
       <div className="bg-blue-100 p-5">{problemData.description}</div>
       <div className="flex justify-center">
@@ -66,7 +78,8 @@ export default function Id({params}){
             <div>
               <input 
                 type="checkbox"
-                onChange={(e)=>{setUserOptionsHandler(e, i)}}
+                checked={e.isTrue}
+                onChange={(e)=>setUserOptionsHandler(e, i)}
               />
             </div>
             <div>
@@ -77,6 +90,7 @@ export default function Id({params}){
       </div>
       <div className="flex justify-center p-3">
         <button 
+          ref={sendBtnRef}
           className="w-1/2 rounded-md bg-black bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
           onClick={checkUserOptions}
         >
