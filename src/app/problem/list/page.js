@@ -8,7 +8,7 @@ export default async function List(){
   const session = await getServerSession(authOptions);
   const db = client.db("ASK_ANY");
   const list = await db.collection('PROBLEMS').find()
-    .project({title: 1, author: 1, countRight: 1, countTry: 1}).toArray();
+    .project({title: 1, author: 1, countRight: 1, countTry: 1}).sort({_id:-1}).toArray();
   const userData = await db.collection('USERS').findOne({email: session.user.email});
   return(
     <>
@@ -18,9 +18,9 @@ export default async function List(){
             <div className="flex min-w-0 gap-x-4 pl-3">
               {/* <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={item.author?.image} alt="" /> */}
               <div>
-                { userData.problems[item._id] === undefined ? <div className="w-3"></div>
+                { userData ? (userData.problems[item._id] === undefined ? <div className="w-3"></div>
                   : userData.problems[item._id]?.isSolved ? <FontAwesomeIcon style={{color: "green"}} icon={faCheck}/> 
-                  : <FontAwesomeIcon style={{color: "red"}} icon={faXmark}/>}
+                  : <FontAwesomeIcon style={{color: "red"}} icon={faXmark}/>) : ""}
               </div>
               <div className="min-w-0 flex-auto">
                 <a href={`/problem/${item._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{item.title}</a>

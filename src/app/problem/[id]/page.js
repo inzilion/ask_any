@@ -56,7 +56,7 @@ export default function Id({params}){
     <div className="flex flex-col gap-1">
       {modal}
       { userData ? (
-        userData.problems[params.id].isSolved ? 
+        userData.problems[params.id]?.isSolved ? 
           <div className='flex justify-center p-3 items-center gap-3'>
             <p>이미 문제를 해결하셨습니다.</p>
             <button 

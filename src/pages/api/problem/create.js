@@ -24,6 +24,5 @@ export default async function handler(req, res){
       image: path,
     }}
   )
-  console.log(finalResult);
   return res.status(200).json(finalResult);
 }

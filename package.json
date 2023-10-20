@@ -19,7 +19,8 @@
     "next": "13.5.4",
     "next-auth": "^4.23.2",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-textarea-autosize": "^8.5.3"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",
