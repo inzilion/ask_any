@@ -22,19 +22,18 @@ export default async function handler(req, res){
 //  console.log(session.user.email);
   if(userData === null){
     userData = {
-      user: session.user,
-      email: session.user.email,
+      ...session.user,
       problems:{},
     }
     await db.collection('USERS').insertOne(userData);
   }
   if(!userData.problems[data.id])
-    userData.problems[data.id] = {isSolved: false, tryCount: 0};
+    userData.problems[data.id] = {isSolved: false, countTry: 0};
   
   if(userData.problems[data.id].isSolved === false){
     if(data.value) userData.problems[data.id].isSolved = true;
     else           userData.problems[data.id].isSolved = false;
-    userData.problems[data.id].tryCount += 1;
+    userData.problems[data.id].countTry += 1;
 
     await db.collection('USERS').updateOne(
       {email: session.user.email}, 
