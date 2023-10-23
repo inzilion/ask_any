@@ -27,7 +27,6 @@ export default function Profile(){
             <div>이름:</div>
             <input type='text' defaultValue={userData.name}
               className='border focus-visible' onChange={(e)=>setUserName(e.target.value)}/>
-
           </div>
           <div className='flex gap-2'>
             <div>email:</div><div>{userData.email}</div>
@@ -44,7 +43,11 @@ export default function Profile(){
             className='rounded-md bg-red-500 bg-opacity-20 px-4 py-2 text-sm font-medium text-black hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
             onClick={()=>{
               fetch('api/profile/edit',{ 
-                method: "POST", body:JSON.stringify({ memo:userMemo, name:userName })})
+                method: "POST", 
+                body:JSON.stringify({ 
+                  memo:(userMemo ? userMemo : userData.memo), 
+                  name:(userName ? userName : userData.name) 
+                })})
               .then(res=>res.json()
               .then(json=>{
                 setModal(<Modal contents={{
