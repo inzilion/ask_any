@@ -20,7 +20,17 @@ export default function Navbar(){
       name: "Create",
       href: "/problem/create",
       isMobile: isMobile,
-    }
+    },
+    {
+      name: "Test",
+      href: "/problem/test",
+      isMobile: isMobile,
+    },
+    {
+      name: "Rank",
+      href: "/problem/rank",
+      isMobile: isMobile,
+    },
   ];
 
   return(

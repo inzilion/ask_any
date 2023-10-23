@@ -22,6 +22,7 @@ export default async function handler(req, res){
 //  console.log(session.user.email);
   if(userData === null){
     userData = {
+      user: session.user,
       email: session.user.email,
       problems:{},
     }
@@ -36,7 +37,7 @@ export default async function handler(req, res){
     userData.problems[data.id].tryCount += 1;
 
     await db.collection('USERS').updateOne(
-      {email: session.user.email},
+      {email: session.user.email}, 
       {$set: userData}
     )
   }
