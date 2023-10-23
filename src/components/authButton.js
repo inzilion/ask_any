@@ -16,12 +16,6 @@ export default function AuthButton(){
       handler: null,
     },
     {
-      name: "Setting",
-      href: "/profile/setting",
-      isMobile: isMobile,
-      handler: null,
-    },
-    {
       name: "Sign Out",
       href: "#",
       isMobile: isMobile,

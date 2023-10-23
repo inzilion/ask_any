@@ -15,8 +15,10 @@ export default async function Rank(){
       user.rightRate = (sumOfSolved/sumOfTry*100).toFixed(1);
       return user;
     })
+  
+  rankList.sort((a, b)=>a.sumOfSolved > b.sumOfSolved);
 
-    return(
+  return(
     <>
       <ul className="divide-y divide-gray-300 p-3">
         <li className="flex justify-between py-2">
@@ -38,13 +40,13 @@ export default async function Rank(){
               </div>
             </div>
             <div className='flex justify-center w-1/2'>
-              <div className='text-xs'>{user.memo}</div>
+              <div className='text-sm'>{user.memo}</div>
             </div>
             <div className='flex justify-center w-1/8'>
-              <div className='text-xs'>{user.sumOfSolved}</div>
+              <div className='text-sm'>{user.sumOfSolved}</div>
             </div>
             <div className='flex justify-center w-1/8'>
-              <div className='text-xs'>{user.rightRate}%</div>
+              <div className='text-sm'>{user.rightRate}%</div>
             </div>
           </li>
         ))}

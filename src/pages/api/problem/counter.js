@@ -23,6 +23,7 @@ export default async function handler(req, res){
   if(userData === null){
     userData = {
       ...session.user,
+      memo:"열심히 공부하세.",
       problems:{},
     }
     await db.collection('USERS').insertOne(userData);
