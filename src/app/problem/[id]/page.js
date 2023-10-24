@@ -5,6 +5,7 @@ import Modal from "@/components/modal";
 import { useSession } from "next-auth/react";
 
 export default function Id({params}){
+  const { data: session } = useSession();
   const [ problemData, setProblemData ] = useState({});
   const [ userData, setUserData ] = useState('');
   const [ userOptions, setUserOptions ] = useState([]);
@@ -68,6 +69,20 @@ export default function Id({params}){
             </button>
           </div> : ""
         ): ""}
+      {
+        (session && problemData) ? 
+          (session.user.email === problemData.author?.email) || (session.user.email === "inzilion@gmail.com") ?
+          <div className='grid justify-items-end'>
+            <a href={`/problem/edit?id=${params.id}`}
+              className='rounded-md bg-red-300 px-4 py-2 text-sm font-medium text-black  hover:bg-red-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+              onClick={()=>{}}
+            >
+              문제수정
+            </a>
+          </div>
+          : ""
+        : ""
+      }        
       <div className="bg-blue-100 p-5 text-black-100">{problemData.title}</div>
       <div className="bg-blue-100 p-5">{problemData.description}</div>
       <div className="flex justify-center">

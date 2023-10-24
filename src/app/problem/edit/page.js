@@ -1,5 +1,4 @@
 'use client'
-import dayjs from "@/util/myDay";
 import Selection from "@/components/selection";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
@@ -7,21 +6,9 @@ import { useState, useRef, useEffect } from "react";
 import Modal from '@/components/modal';
 import  TextareaAutosize from "react-textarea-autosize";
 
-const mockData = {
-  date: dayjs().toString(),
-  category: "상식",
-  level: "상",
-  type: "선택형",
-  title: "",
-  description: "",
-  image:"",
-  options: [],
-}
-
 export default function Edit(props){
   const { data: session } = useSession();
-  mockData.author = session?.user;    
-  const [ problemData, setProblemData ] = useState(mockData);
+  const [ problemData, setProblemData ] = useState('');
   const [ optionContent, setOptionContent] = useState('');
   const optionContentRef = useRef();
 
@@ -32,15 +19,23 @@ export default function Edit(props){
     })
     .then(res=>res.json())
     .then(json=>{
-      setProblemData(JSON.parse(json).problemData);
-      if(problemData.author.email !== session?.user?.email)
-        return <Modal contents={{ 
+      const data = JSON.parse(json).problemData;
+      setProblemData(data);
+    })
+  },[])
+
+  useEffect(()=>{
+    if(session && problemData)
+      if(!(problemData.author.email === session.user.email || session.user.email ==="inzilion@gmail.com")){
+      setModal(
+        <Modal contents={{ 
           title:"비정상적인 접근", 
           description: "접근이 허가 되지 않은 사용자입니다.",
           btnLabel: "확인"}}
-        />
-    })
-  },[])
+        />);
+      setProblemData('');
+      }
+  }, [session, problemData])
   
 
   const changeOptionContent = (e) => setOptionContent(e.target.value);
@@ -109,6 +104,7 @@ export default function Edit(props){
 
   const [modal, setModal] = useState('');
   const createProblem = () => {
+
     if (!(problemData.title && problemData.description && problemData.options.length)){
       setModal(
         <Modal contents={{ 
@@ -133,22 +129,22 @@ export default function Edit(props){
       return;
     }
 
-    fetch('/api/problem/create', {
+    fetch('/api/problem/edit', {
       method: 'POST',
-      body: JSON.stringify({id: props.searchParams.id, data: problemData}),
+      body: JSON.stringify(problemData),
     })
     .then(res=>res.json())
     .then(json=>{
       setModal(
         <Modal contents={{ 
-          title:"등록완료", 
-          description: "문제 등록이 완료되었습니다.",
+          title:"수정완료", 
+          description: "문제 수정이 완료되었습니다.",
           btnLabel: "확인"}}
         />
       );
       setTimeout(()=>setModal(''), 5000);
     });
-    setProblemData(mockData);
+//    setProblemData(mockData);
   }
   
   if(!session) 
@@ -158,7 +154,7 @@ export default function Edit(props){
         description: "로그인이 필요합니다..",
         btnLabel: "확인"}}
       />
-
+  
   return(
     <div>
       {modal}
