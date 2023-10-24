@@ -3,7 +3,7 @@ import dayjs from "@/util/myDay";
 import Selection from "@/components/selection";
 import Options from "@/components/options";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Modal from '@/components/modal';
 import  TextareaAutosize from "react-textarea-autosize";
 
@@ -25,14 +25,23 @@ export default function Edit(props){
   const [ optionContent, setOptionContent] = useState('');
   const optionContentRef = useRef();
 
-  if(props.searchParams.id){
+  useEffect(()=>{
     fetch('/api/problem/get', {
       method: 'POST',
       body: props.searchParams.id,
     })
     .then(res=>res.json())
-    .then(json=>setProblemData(JSON.parse(json).problemData))
-  }
+    .then(json=>{
+      setProblemData(JSON.parse(json).problemData);
+      if(problemData.author.email !== session?.user?.email)
+        return <Modal contents={{ 
+          title:"비정상적인 접근", 
+          description: "접근이 허가 되지 않은 사용자입니다.",
+          btnLabel: "확인"}}
+        />
+    })
+  },[])
+  
 
   const changeOptionContent = (e) => setOptionContent(e.target.value);
   
@@ -126,7 +135,7 @@ export default function Edit(props){
 
     fetch('/api/problem/create', {
       method: 'POST',
-      body: JSON.stringify(problemData),
+      body: JSON.stringify({id: props.searchParams.id, data: problemData}),
     })
     .then(res=>res.json())
     .then(json=>{
@@ -155,14 +164,14 @@ export default function Edit(props){
       {modal}
       <div className="m-5 flex gap-4 flex-col">
         <div className="flex-col flex gap-2 justify-between">
-          <Selection content="분야" {...selectionData.category}/>
-          <Selection content="난이도" {...selectionData.level}/>
-          <Selection content="문제유형" {...selectionData.type}/>
+          <Selection content="분야" {...selectionData.category} value={problemData.category}/>
+          <Selection content="난이도" {...selectionData.level} value={problemData.level}/>
+          <Selection content="문제유형" {...selectionData.type} value={problemData.type}/>
         </div>
         <div>
           <input
             id='title'
-            placeholder="제목을 입력하세요"
+            defaultValue={problemData.title}
             className="block w-full rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={(e)=>changeState(e)}
           />
@@ -173,7 +182,7 @@ export default function Edit(props){
             id="description" 
             className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={(e)=>changeState(e)}
-            placeholder="문제 설명을 입력하세요"
+            defaultValue={problemData.description}
           >
           </TextareaAutosize>
         </div>
@@ -198,7 +207,7 @@ export default function Edit(props){
           onClick={createProblem}
           className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          문제 등록
+          문제 수정
         </button>
       </div>        
     </div>

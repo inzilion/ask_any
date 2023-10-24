@@ -1,4 +1,4 @@
-export default function Selection({content, id, options, handler}){
+export default function Selection({content, id, options, handler, value}){
   return(
     <div className='p-3 flex justify-between bg-gray-100'>
       <label className="text-sm">{content}: </label>
@@ -8,7 +8,12 @@ export default function Selection({content, id, options, handler}){
         onChange={(e)=>handler(e)}
       >
       {
-        options.map((e, i)=><option key={i}>{e}</option>) 
+        options.map((e, i)=>{
+          if(value == e)
+            return <option selected key={i}>{e}</option>
+          else
+            return <option key={i}>{e}</option>
+        }) 
       }
       </select>
     </div>
