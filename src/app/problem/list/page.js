@@ -9,7 +9,7 @@ export default async function List(){
   const db = client.db("ASK_ANY");
   const list = await db.collection('PROBLEMS').find()
     .project({title: 1, author: 1, countRight: 1, countTry: 1}).sort({_id:-1}).toArray();
-  const userData = await db.collection('USERS').findOne({email: session.user.email});
+  const userData = await db.collection('USERS').findOne({email: session.user?.email});
   return(
     <>
       <ul className="divide-y divide-gray-100 p-3">

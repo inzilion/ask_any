@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/modal";
+import { useSession } from "next-auth/react";
 
 export default function Id({params}){
   const [ problemData, setProblemData ] = useState({});
