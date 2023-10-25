@@ -103,7 +103,7 @@ export default function Edit(props){
   }
 
   const [modal, setModal] = useState('');
-  const createProblem = () => {
+  const editProblem = () => {
 
     if (!(problemData.title && problemData.description && problemData.options.length)){
       setModal(
@@ -200,7 +200,7 @@ export default function Edit(props){
         </div>
         <button
           type="button"
-          onClick={createProblem}
+          onClick={editProblem}
           className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           문제 수정

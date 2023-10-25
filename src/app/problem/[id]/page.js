@@ -72,15 +72,25 @@ export default function Id({params}){
       {
         (session && problemData) ? 
           (session.user.email === problemData.author?.email) || (session.user.email === "inzilion@gmail.com") ?
-          <div className='grid justify-items-end'>
-            <a href={`/problem/edit?id=${params.id}`}
-              className='rounded-md bg-red-300 px-4 py-2 text-sm font-medium text-black  hover:bg-red-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-              onClick={()=>{}}
-            >
-              문제수정
-            </a>
+          <div className="flex justify-center gap-3">
+            <div className='grid justify-items-end py-2'>
+              <a href={`/problem/edit?id=${params.id}`}
+                className='rounded-md bg-blue-300 px-4 py-2 text-sm font-medium text-black  hover:bg-blue-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                onClick={()=>{}}
+              >
+                문제수정
+              </a>
+            </div>
+            <div className='grid justify-items-end py-2'>
+              <a href="#"
+                className='rounded-md bg-red-300 px-4 py-2 text-sm font-medium text-black  hover:bg-red-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
+                onClick={()=>{}}
+              >
+                문제삭제
+              </a>
+            </div>
           </div>
-          : ""
+        : ""
         : ""
       }        
       <div className="bg-blue-100 p-5 text-black-100">{problemData.title}</div>

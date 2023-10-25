@@ -5,7 +5,7 @@ import { ObjectId } from 'mongodb';
 export default async function handler(req, res){
   const data = JSON.parse(req.body);
   const {_id, ...newData} = data;
-  
+  console.log(data);
   if(newData.image){
     const copyImgStr = newData.image;
     const file = _id.toString();
