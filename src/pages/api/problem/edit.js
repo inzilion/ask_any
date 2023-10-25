@@ -13,12 +13,25 @@ export default async function handler(req, res){
     fs.writeFile(path, copyImgStr, (err)=>console.log(err));
     newData.image = path;
   }
+  
   const db = client.db("ASK_ANY");
   const result = await db.collection("PROBLEMS").updateOne(
     {_id: new ObjectId(_id)},
     {$set: newData}
   )
-  const ret = await db.collection('USERS').find({problems:{_id : {isSolved : true} }}).toArray();//, { $set:{ problems: { _id: { isSolved: false}}}}, {multi: true});
-  console.log(ret);
+  const a = await db.collection('USERS').findOne({[`problems.${_id}.isSolved`]: true});
+  const ret = await db.collection('USERS').updateMany(
+    {
+      [`problems.${_id}.isSolved`]: true
+    }, 
+    {
+      $set: {
+        [`problems.${_id}`]: {
+          isSolved: false, 
+          countTry: 0
+        }
+      }
+    }
+  );
   return res.status(200).json(ret);
 }
