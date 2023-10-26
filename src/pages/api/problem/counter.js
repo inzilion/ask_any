@@ -8,8 +8,10 @@ export default async function handler(req, res){
   const db = await client.db("ASK_ANY");
   const foundDoc = await db.collection("PROBLEMS").findOne({_id: new ObjectId(data.id)});
 
-  if(!foundDoc.countRight) foundDoc.countRight = 0;
-  if(!foundDoc.countTry)   foundDoc.countTry = 0;
+  if(!foundDoc.countTry){
+    foundDoc.countTry = 0;
+    foundDoc.countRight = 0;
+  }
 
   foundDoc[data.key] += data.value;
   foundDoc.countTry += 1;
