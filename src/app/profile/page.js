@@ -34,7 +34,7 @@ export default function Profile(){
           <div className='flex gap-2'>
             <div>하고싶은말:</div>
             <input type='text' defaultValue={userData.memo}
-              className='border' onChange={(e)=>setUserMemo(e.target.value.slice(0,20))}/>
+              className='border' onChange={(e)=>setUserMemo(e.target.value.slice(0,25))}/>
           </div>
         </div>
         <div className='flex justify-center'>

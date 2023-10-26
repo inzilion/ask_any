@@ -24,7 +24,7 @@ export default async function Rank(){
         <li className="flex justify-between py-2">
           <div className='grid justify-items-center w-1/12'><p>순위</p></div>
           <div className='grid justify-items-center w-3/12'><p>이름</p></div>
-          <div className='grid justify-items-center w-5/12'><p>하고 싶은 말</p></div>
+          <div className='grid justify-items-center w-5/12'><p>하고 싶은 말 (25자)</p></div>
           <div className='grid justify-items-center w-2/12'><p>맞춘문제수</p></div>
           <div className='grid justify-items-center w-1/12'><p>정답률</p></div>
         </li>
