@@ -12,9 +12,9 @@ export default async function List(){
   const userData = await db.collection('USERS').findOne({email: session?.user?.email});
   return(
     <>
-      <ul className="divide-y divide-gray-100 p-3">
+      <ul className="divide-y divide-gray-300 p-2">
         {list.map((item, i) => (
-          <li key={i} className="flex justify-between gap-x-6 py-5">
+          <li key={i} className="flex justify-between gap-x-6 py-2">
             <div className="flex min-w-0 gap-x-4 pl-3">
               {/* <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={item.author?.image} alt="" /> */}
               <div>

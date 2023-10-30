@@ -1,24 +1,20 @@
 'use client'
-import { Popover } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+
+import { useState } from "react"
 
 export default function Test() {
+  const [ aaa, setAaa] = useState([]);
+
+  const onClickHandler = (e) => {
+    setAaa(prev => [...prev, 'a']);
+    console.log(aaa);
+  }
+  
+
+
   return (
-    <Popover>
-      {({ open }) => (
-        /* Use the `open` state to conditionally change the direction of the chevron icon. */
-        <>
-          <Popover.Button>
-            Solutions
-            <ChevronDownIcon className={open ? 'rotate-180 transform' : ''} />
-          </Popover.Button>
-          <Popover.Panel>
-            <a href="/insights">Insights</a>
-            <a href="/automations">Automations</a>
-            <a href="/reports">Reports</a>
-          </Popover.Panel>
-        </>
-      )}
-    </Popover>
+    <>
+      <button onClick={(e)=>onClickHandler(e)}>눌러 눌러</button>
+    </>
   )
 }
