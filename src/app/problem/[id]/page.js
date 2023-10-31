@@ -55,7 +55,7 @@ export default function Id({params}){
 }
 
   return(
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col divide-y ">
       {modal}
       { userData ? (
         userData.problems[params.id]?.isSolved ? 
@@ -93,10 +93,10 @@ export default function Id({params}){
         : ""
         : ""
       }        
-      <div className="bg-blue-100 p-5 text-black-100">{problemData.title}</div>
-      <div className="bg-blue-100 p-5">{problemData.description}</div>
+      <div className="p-3 text-black-100">제목: {problemData.title}</div>
+      <div className="p-3">{problemData.description}</div>
       <div className="flex justify-center">
-        {problemData.image ? <img className="w-1/2" src={problemData.image}/> : ""}
+        {problemData.image ? <img className="w-1/3 p-2" src={problemData.image}/> : ""}
       </div>
       <div className="flex-col flex gap-2 bg-blue-100 p-5">
         {userOptions.map((e, i)=>

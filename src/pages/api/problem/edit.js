@@ -20,7 +20,6 @@ export default async function handler(req, res){
     {_id: new ObjectId(_id)},
     {$set: newData}
   )
-  const a = await db.collection('USERS').findOne({[`problems.${_id}.isSolved`]: true});
   const ret = await db.collection('USERS').updateMany(
     {
       [`problems.${_id}.isSolved`]: true

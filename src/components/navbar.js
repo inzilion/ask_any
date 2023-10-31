@@ -2,8 +2,8 @@ import Link from "next/link";
 import AuthButton from "./authButton";
 
 export default function Navbar(){
-  const menuItemClassName = "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium";
-  const menuItemClassNameMobile = "bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
+  const menuItemClassName = "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-2 py-2 text-sm font-medium";
+  const menuItemClassNameMobile = "bg-gray-900 text-white block rounded-md px-2 py-2 text-base font-medium"
   const isMobile = (isTrue) => isTrue ? menuItemClassNameMobile : menuItemClassName ;
   const menuItems = [
     {
@@ -12,7 +12,7 @@ export default function Navbar(){
       isMobile: isMobile,
     },
     {
-      name: "문제",
+      name: "모든문제",
       href: "/problem/list",
       isMobile: isMobile,
     },
@@ -42,7 +42,7 @@ export default function Navbar(){
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="hidden md:block ">
-          <div className="flex h-16 items-center justify-between">
+          <div className="flex h-14 items-center justify-between">
             <div className="flex items-center">
               <div className="ml-10 flex items-baseline space-x-4">
                 {
