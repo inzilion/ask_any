@@ -1,5 +1,4 @@
 import client from "@/util/database";
-import { ObjectId } from "mongodb";
 import fs from "fs";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
@@ -18,6 +17,5 @@ export default async function handler(req, res){
       }
     return p;
   }) 
-  //console.log(problemList);
   return res.status(200).json(JSON.stringify(problemList));
 }

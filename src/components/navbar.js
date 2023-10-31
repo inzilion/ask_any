@@ -7,27 +7,32 @@ export default function Navbar(){
   const isMobile = (isTrue) => isTrue ? menuItemClassNameMobile : menuItemClassName ;
   const menuItems = [
     {
-      name: "Home",
+      name: "홈",
       href: "/",
       isMobile: isMobile,
     },
     {
-      name: "Problems",
+      name: "문제",
       href: "/problem/list",
       isMobile: isMobile,
     },
     {
-      name: "Create",
+      name: "문제만들기",
       href: "/problem/create",
       isMobile: isMobile,
     },
     {
-      name: "Test",
-      href: "/problem/test",
+      name: "연습",
+      href: "/problem/practice",
       isMobile: isMobile,
     },
     {
-      name: "Rank",
+      name: "대회",
+      href: "/problem/contest",
+      isMobile: isMobile,
+    },
+    {
+      name: "순위",
       href: "/problem/rank",
       isMobile: isMobile,
     },
