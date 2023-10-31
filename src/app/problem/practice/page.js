@@ -3,15 +3,14 @@
 import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/modal";
 import { useSession } from "next-auth/react";
+const MAX_PROBLEM = 10;
 
 export default function Practice(){
   const [ problemList, setProblemList ] = useState([]);
   const [ problemData, setProblemData ] = useState({options:[]});
-  const [ userOptions, setUserOptions ] = useState([])
+  const [ userOptions, setUserOptions ] = useState(Array(MAX_PROBLEM).fill([]));
   const [ modal, setModal ] = useState('');
-  const [ countRight, setCountRight] =  useState(0);
   const [ ptr, setPtr] = useState(0);
-  
   
   useEffect(()=>{
     fetch('/api/problem/practice', { method: 'POST'})
@@ -24,18 +23,31 @@ export default function Practice(){
     setUserOptions(problemList.map(p=>p.options.map(option=>{option.isTrue=false; return option;})))
   }, [problemList])
 
-  useEffect(()=>setProblemData(problemList[ptr]), [ptr]);
+  useEffect(()=> ptr < MAX_PROBLEM ? setProblemData(problemList[ptr]) : "", [ptr]);
 
   const setUserOptionsHandler = (e, i) => {
     const copy = [...userOptions];
-    copy[i].isTrue = e.target.checked;
+    copy[ptr][i].isTrue = e.target.checked;
     setUserOptions(copy);
   }
 
   const checkUserOptions = (offset) => {
-    const result = problemData.options.filter((e, i)=> e.isTrue !== userOptions[ptr][i].isTrue);
-    if (result.length)  setCountRight(countRight+1);
-    setPtr(offset);
+    if(ptr == MAX_PROBLEM - 1){
+      const modalContents = { title:"알림", description: "마지막 문제입니다.", btnLabel: "확인" }
+      setModal(<Modal contents={modalContents}/>)
+      setTimeout(() => {
+        setModal('')
+      }, 3000);
+      return;
+    }
+    setPtr(ptr+offset);
+    console.log(ptr, MAX_PROBLEM)
+  }
+
+  const showResult = () => {
+    const sumRight = problemList.map((p, i)=>p.options.map((op, j)=> op.isTrue == userOptions[i][j]).reduce((acc, cur)=>acc + cur) == p.length).reduce((acc, cur)=>acc + cur);
+    const modalContents = { title:"결과", description: `${sumRight}문제 맞췄습니다.`, btnLabel: "확인" }
+    setModal(<Modal contents={modalContents}/>)
   }
 
   return(
@@ -43,13 +55,14 @@ export default function Practice(){
       {modal}
       {problemData ? 
       <div>
+        <div className="bg-red-100 p-5 text-black-100">{ptr+1}번 문제</div>
         <div className="bg-blue-100 p-5 text-black-100">{problemData.title}</div>
         <div className="bg-blue-100 p-5">{problemData.description}</div>
         <div className="flex justify-center">
           {problemData.image ? <img className="w-1/2" src={problemData.image}/> : ""}
         </div>
         <div className="flex-col flex gap-2 bg-blue-100 p-5">
-          {userOptions.map((e, i)=>
+          {userOptions[ptr].map((e, i)=>
             <div key={i} className="flex gap-2">
               <div>
                 <input 
@@ -79,10 +92,10 @@ export default function Practice(){
           >
             다음 문제
           </button>
-          {ptr==9 ?
+          {ptr == MAX_PROBLEM - 1 ?
           <button 
             className="w-1/6 rounded-md bg-black bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-            onClick={()=>{checkUserOptions(0)}}
+            onClick={showResult}
           >
             결과보기
           </button>
