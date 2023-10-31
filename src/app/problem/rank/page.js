@@ -1,4 +1,14 @@
 import client from '@/util/database';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMedal } from "@fortawesome/free-solid-svg-icons";
+
+const medalList = (rank) => {
+  switch (rank){
+    case 1 : return <FontAwesomeIcon style={{color: "gold", fontSize:"1.5rem"}} icon={faMedal}/>;
+    case 2 : return <FontAwesomeIcon style={{color: "silver", fontSize:"1.5rem"}} icon={faMedal}/>;
+    case 3 : return <FontAwesomeIcon style={{color: "brown", fontSize:"1.5rem"}} icon={faMedal}/>;
+  }
+}
 
 export default async function Rank(){
   const db = client.db("ASK_ANY");
@@ -31,9 +41,9 @@ export default async function Rank(){
         {rankList.map((user, i) => (
           <li key={i} className="flex justify-between py-2">
             <div className='grid justify-items-center w-1/12'>
-              <p className='text-xs'>{i+1}</p>
+              <p className='text-ms'>{i+1<=3 ? medalList(i+1) : i+1}</p>
             </div>
-            <div className="grid justify-items-start w-3/12">
+            <div className="grid justify-items-center w-3/12">
               <div className='flex gap-1'>
                 <img className="h-6 w-6 rounded-full bg-gray-50" src={user.image} alt="" />
                 <p className="text-sm font-semibold leading-6 text-gray-900">{user.name}</p>

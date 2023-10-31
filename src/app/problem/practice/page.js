@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/modal";
-import { useSession } from "next-auth/react";
-const MAX_PROBLEM = 3;
+const MAX_PROBLEM = 5;
 
 export default function Practice(){
   const [ problemList, setProblemList ] = useState([]);
@@ -11,7 +10,6 @@ export default function Practice(){
   const [ userOptions, setUserOptions ] = useState(Array(MAX_PROBLEM).fill([]));
   const [ modal, setModal ] = useState('');
   const [ ptr, setPtr] = useState(0);
-  const [ result, setResult ] = useState(0);
   
   useEffect(()=>{
     fetch('/api/problem/practice', { method: 'POST'})
@@ -27,12 +25,6 @@ export default function Practice(){
 
   useEffect(()=> ptr < MAX_PROBLEM ? setProblemData(problemList[ptr]) : "", [ptr]);
   
-  useEffect(()=>{
-    const modalContents = { title:"결과", description: `${result}문제 맞췄습니다.`, btnLabel: "확인" }
-    setModal(<Modal contents={modalContents}/>)
-  }, [result]);
-
-
   const setUserOptionsHandler = (e, i) => {
     const copy = [...userOptions];
     copy[ptr][i].isTrue = e.target.checked;
@@ -48,7 +40,9 @@ export default function Practice(){
 
   const showResult = () => {
     const sumRight = problemList.map((p, i)=>p.options.length == p.options.map((op, j)=> op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur)=>acc+cur)).reduce((acc, cur)=>acc+cur)
-    setResult(sumRight);
+    const modalContents = { title:"결과", description: `${sumRight}문제 맞췄습니다.`, btnLabel: "확인" }
+    setModal(<Modal contents={modalContents}/>)
+
   }
 
 
