@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Modal from '@/components/modal';
 import  TextareaAutosize from "react-textarea-autosize";
+import { level, category, type } from '@/util/data';
 
 export default function Edit(props){
   const { data: session } = useSession();
@@ -85,19 +86,19 @@ export default function Edit(props){
   const selectionData = {
     level: {
       id: 'level',
-      options: ['상', '중', '하'],
+      options: level,
       handler: changeState,
     },
     
     category: {
       id: 'category',
-      options: ['상식', '넌센스', '컴일'],
+      options: category,
       handler: changeState,
     },
 
     type: {
       id: 'type',
-      options: ['선택형', '단답형(개발중)', '서술형(개발중)'],
+      options: type,
       handler: changeState,
     }
   }

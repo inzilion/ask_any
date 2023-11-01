@@ -55,7 +55,7 @@ export default function Id({params}){
 }
 
   return(
-    <div className="flex flex-col divide-y ">
+    <div className="flex flex-col divide-y gap-2">
       {modal}
       { userData ? (
         userData.problems[params.id]?.isSolved ? 
@@ -98,22 +98,30 @@ export default function Id({params}){
       <div className="flex justify-center">
         {problemData.image ? <img className="w-1/3 p-2" src={problemData.image}/> : ""}
       </div>
-      <div className="flex-col flex gap-2 bg-blue-100 p-5">
-        {userOptions.map((e, i)=>
-          <div key={i} className="flex gap-2">
-            <div>
-              <input 
-                type="checkbox"
-                checked={e.isTrue}
-                onChange={(e)=>setUserOptionsHandler(e, i)}
-              />
+      { problemData.type == "선택형" 
+      ? <div className="flex-col flex gap-2 bg-blue-100 p-5">
+          {userOptions.map((e, i)=>
+            <div key={i} className="flex gap-2">
+              <div>
+                <input 
+                  type="checkbox"
+                  checked={e.isTrue}
+                  onChange={(e)=>setUserOptionsHandler(e, i)}
+                />
+              </div>
+              <div>
+                {e.content}
+              </div>
             </div>
-            <div>
-              {e.content}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      : <input
+          id='answer'
+          placeholder="정답을 입력하세요."
+          className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          onChange={()=>{}}
+        />
+      }
       <div className="flex justify-center p-3">
         <button 
           ref={sendBtnRef}

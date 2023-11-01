@@ -88,7 +88,7 @@ export default function Practice(){
           {
             ptr < MAX_PROBLEM-1  ?
               <button 
-                className="w-1/6 rounded-md bg-black bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                className="w-1/6 rounded-md bg-green-600 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                 onClick={()=>{checkUserOptions(1)}}
               >
                 다음 문제
@@ -96,7 +96,7 @@ export default function Practice(){
 
             :
               <button 
-                className="w-1/6 rounded-md bg-black bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                className="w-1/6 rounded-md bg-red-700 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                 onClick={showResult}
               >
                 결과보기
