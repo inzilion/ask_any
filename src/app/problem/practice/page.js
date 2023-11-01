@@ -8,6 +8,7 @@ export default function Practice(){
   const [ problemList, setProblemList ] = useState([]);
   const [ problemData, setProblemData ] = useState({options:[]});
   const [ userOptions, setUserOptions ] = useState(Array(MAX_PROBLEM).fill([]));
+  const [ userAnswer, setUserAnswer] = useState(Array(MAX_PROBLEM).fill(''));
   const [ modal, setModal ] = useState('');
   const [ ptr, setPtr] = useState(0);
   
@@ -19,8 +20,8 @@ export default function Practice(){
 
   useEffect(()=>{
     setProblemData(problemList[ptr]);
-    const copy = JSON.parse(JSON.stringify(problemList.map(p=>p.options)));
-    setUserOptions(copy.map(p=>p.map(op=>{op.isTrue = false; return op;})));
+    const copyOptions = JSON.parse(JSON.stringify(problemList.map(p=>p.options)));
+    setUserOptions(copyOptions.map(p=>p.map(op=>{op.isTrue = false; return op;})));
     }, [problemList])
 
   useEffect(()=> ptr < MAX_PROBLEM ? setProblemData(problemList[ptr]) : "", [ptr]);
@@ -31,21 +32,23 @@ export default function Practice(){
     setUserOptions(copy);
   }
 
+  const setUserAnswerHandler = (e) => {
+    const copy = [...userAnswer];
+    copy[ptr] = e.target.value;
+    setUserAnswer(copy);
+  }
+
   const checkUserOptions = (offset) => {
     setPtr(ptr+offset);
-    console.log(
-      problemList.map((p, i)=>p.options.length == p.options.map((op, j)=> op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur)=>acc+cur)).reduce((acc, cur)=>acc+cur)
-    )
   }
 
   const showResult = () => {
-    const sumRight = problemList.map((p, i)=>p.options.length == p.options.map((op, j)=> op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur)=>acc+cur)).reduce((acc, cur)=>acc+cur)
-    const modalContents = { title:"결과", description: `${sumRight}문제 맞췄습니다.`, btnLabel: "확인" }
+    const sumOptionRight = problemList.map((p, i) => p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur)).reduce((acc, cur) => acc + cur);
+    const sumAnswerRight = problemList.map((p, i) => !p.answer && (p.answer == userAnswer[ptr])).reduce((acc, cur) => acc + cur);
+    const modalContents = { title:"결과", description: `${sumOptionRight + sumAnswerRight}문제 맞췄습니다.`, btnLabel: "확인" }
     setModal(<Modal contents={modalContents}/>)
 
   }
-
-
 
   return(
     <div className="flex flex-col gap-1">
@@ -58,22 +61,30 @@ export default function Practice(){
         <div className="flex justify-center">
           {problemData.image ? <img className="w-1/3" src={problemData.image}/> : ""}
         </div>
-        <div className="flex-col flex gap-2 bg-blue-100 p-5">
-          {userOptions[ptr].map((e, i)=>
-            <div key={i} className="flex gap-2">
-              <div>
-                <input 
-                  type="checkbox"
-                  checked={e.isTrue}
-                  onChange={(e)=>setUserOptionsHandler(e, i)}
-                />
+        {problemData.type =="선택형"
+        ? <div className="flex-col flex gap-2 bg-blue-100 p-5">
+            {userOptions[ptr].map((e, i)=>
+              <div key={i} className="flex gap-2">
+                <div>
+                  <input 
+                    type="checkbox"
+                    checked={e.isTrue}
+                    onChange={(e)=>setUserOptionsHandler(e, i)}
+                  />
+                </div>
+                <div>
+                  {e.content}
+                </div>
               </div>
-              <div>
-                {e.content}
-              </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        : <input
+            id='answer'
+            placeholder="정답을 입력하세요."
+            className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            onChange={(e)=>{setUserAnswerHandler(e)}}
+          />
+        }
         <div className="flex justify-center p-3 gap-3">
           {
             ptr>0 ?

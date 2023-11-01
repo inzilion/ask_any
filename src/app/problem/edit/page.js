@@ -70,6 +70,16 @@ export default function Edit(props){
       }
       setProblemData(copy);
     },
+    answer: (copy, e) => {
+      copy.answer = e.target.value;
+      setProblemData(copy);
+    },
+    type: (copy, e) => {
+      copy.type = e.target.value;
+      if(copy.type == "선택형") copy.answer = '';
+      if(copy.type == "단답형") copy.options = [];
+      setProblemData(copy);
+    }
   }
 
   const changeState = (e, idx) => {
@@ -106,11 +116,11 @@ export default function Edit(props){
   const [modal, setModal] = useState('');
   const editProblem = () => {
 
-    if (!(problemData.title && problemData.description && problemData.options.length)){
+    if (!(problemData.title && problemData.description && (problemData.options.length||problemData.answer))){
       setModal(
         <Modal contents={{ 
           title:"문제등록에러", 
-          description: "제목 또는 설명 또는 보기가 비어있습니다.",
+          description: "제목 또는 설명 또는 정답이 비어있습니다.",
           btnLabel: "확인"}}
         />
       );
@@ -118,11 +128,11 @@ export default function Edit(props){
       return;
     }
     
-    if(!problemData.options.filter((e)=>e.isTrue===true).length){
+    if(problemData.type=="선택형" && !problemData.options.filter((e)=>e.isTrue===true).length){
       setModal(
         <Modal contents={{ 
           title:"정답에러", 
-          description: "정답이 없습니다.",
+          description: "정답을 체크해주세요.",
           btnLabel: "확인"}}
         />
       );
@@ -145,7 +155,7 @@ export default function Edit(props){
       );
       setTimeout(()=>setModal(''), 5000);
     });
-//    setProblemData(mockData);
+
   }
   
   if(!session) 
@@ -197,6 +207,16 @@ export default function Edit(props){
               changeState={changeState}
             />
             : ""
+          }
+          {problemData.type ==="단답형" ?
+            <input
+              id='answer'
+              placeholder="정답을 입력하세요."
+              defaultValue={problemData.answer}
+              className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              onChange={(e)=>{changeState(e)}}
+            />
+          : ""
           }
         </div>
         <button

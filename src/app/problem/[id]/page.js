@@ -9,6 +9,7 @@ export default function Id({params}){
   const [ problemData, setProblemData ] = useState({});
   const [ userData, setUserData ] = useState('');
   const [ userOptions, setUserOptions ] = useState([]);
+  const [ userAnswer, setUserAnswer ] = useState('');
   const [ modal, setModal ] = useState('');
   const sendBtnRef = useRef();
 
@@ -35,8 +36,18 @@ export default function Id({params}){
     setUserOptions(copy);
   }
 
+  const setUserAnswerHandler = (e) => {
+    setUserAnswer(e.target.value);
+  }
+
   const checkUserOptions = () => {
-    const result = problemData.options.filter((e, i)=> e.isTrue !== userOptions[i].isTrue);
+    
+    let result = [];
+    if(problemData.type == "선택형")
+      result = problemData.options.filter((e, i)=> e.isTrue !== userOptions[i].isTrue);
+    if(problemData.type == "단답형" && problemData.answer != userAnswer)
+      result.push(true);
+
     let modalContents = ''
     if (result.length)  modalContents = { title:"오답", description: "틀렸습니다.", btnLabel: "확인" }
     else                modalContents = { title:"정답", description: "정답입니다.", btnLabel: "확인" }
@@ -63,7 +74,11 @@ export default function Id({params}){
             <p>이미 문제를 해결하셨습니다.</p>
             <button 
               className='rounded-md bg-lime-300 px-4 py-2 text-sm font-medium text-black  hover:bg-lime-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-              onClick={()=>{setUserOptions(problemData.options); sendBtnRef.current.className="hidden";}}
+              onClick={()=>{
+                setUserOptions(problemData.options); 
+                setUserAnswer(problemData.answer); 
+                sendBtnRef.current.className="hidden";
+              }}
             >
               정답보기
             </button>
@@ -118,8 +133,9 @@ export default function Id({params}){
       : <input
           id='answer'
           placeholder="정답을 입력하세요."
+          defaultValue={userAnswer}
           className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          onChange={()=>{}}
+          onChange={(e)=>{setUserAnswerHandler(e)}}
         />
       }
       <div className="flex justify-center p-3">
