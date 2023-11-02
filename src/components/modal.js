@@ -1,11 +1,11 @@
 "use client"
 
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 export default function Modal({contents}) {
   let [isOpen, setIsOpen] = useState(true)
-
+  
   function closeModal() {
     setIsOpen(false)
   }
@@ -60,7 +60,7 @@ export default function Modal({contents}) {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      {contents.description}
+                      {contents.description.split('\n').map((e, i) => <p key={i}>{e}</p>)}
                     </p>
                   </div>
                   <div className="mt-4">

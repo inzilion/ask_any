@@ -43,10 +43,8 @@ export default function Id({params}){
   const checkUserOptions = () => {
     
     let result = [];
-    if(problemData.type == "선택형")
-      result = problemData.options.filter((e, i)=> e.isTrue !== userOptions[i].isTrue);
-    if(problemData.type == "단답형" && problemData.answer != userAnswer)
-      result.push(true);
+    if(problemData.type == "선택형") result = problemData.options.filter((e, i) => e.isTrue !== userOptions[i].isTrue);
+    if(problemData.type == "단답형" && problemData.answer != userAnswer) result.push(true);
 
     let modalContents = ''
     if (result.length)  modalContents = { title:"오답", description: "틀렸습니다.", btnLabel: "확인" }

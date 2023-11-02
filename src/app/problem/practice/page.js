@@ -43,9 +43,21 @@ export default function Practice(){
   }
 
   const showResult = () => {
-    const sumOptionRight = problemList.map((p, i) => p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur)).reduce((acc, cur) => acc + cur);
-    const sumAnswerRight = problemList.map((p, i) => !p.answer && (p.answer == userAnswer[ptr])).reduce((acc, cur) => acc + cur);
-    const modalContents = { title:"결과", description: `${sumOptionRight + sumAnswerRight}문제 맞췄습니다.`, btnLabel: "확인" }
+    const descriptionArray = problemList.map((p, i) => {
+      let isRight = false;
+      if(p.options && (p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur, 0))) isRight = true;
+      if((p.answer == userAnswer[i])) isRight = true;
+      console.log(p.options, userAnswer[i])
+      let resultStr = `${i+1}번: ${p.title}:`;
+      if(isRight) resultStr += "⭕";
+      else        resultStr += "❌"
+      return resultStr + "\n";
+    })
+    const description = descriptionArray.reduce((acc, cur)=> acc + cur, '');
+    // const sumOptionRight = problemList.map((p, i) => p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur)).reduce((acc, cur) => acc + cur);
+    // const sumAnswerRight = problemList.map((p, i) => !(p.answer == undefined || p.answer == '') && (p.answer == userAnswer[i])).reduce((acc, cur) => acc + cur);
+    // console.log(sumAnswerRight, sumOptionRight)
+    const modalContents = { title:"결과", description: description, btnLabel: "확인" }
     setModal(<Modal contents={modalContents}/>)
 
   }
