@@ -109,7 +109,7 @@ export default function Id({params}){
       <div className="p-3 text-black-100">제목: {problemData.title}</div>
       <div className="p-3">{problemData.description}</div>
       <div className="flex justify-center">
-        {problemData.image ? <img className="w-1/3 p-2" src={problemData.image}/> : ""}
+        {problemData.image ? <img className="w-1/2 p-2" src={problemData.image}/> : ""}
       </div>
       { problemData.type == "선택형" 
       ? <div className="flex-col flex gap-2 bg-blue-100 p-5">

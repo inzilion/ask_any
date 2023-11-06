@@ -3,7 +3,9 @@ import fs from "fs";
 
 export default async function handler(req, res){
   const db = await client.db("ASK_ANY");
-  let problemList = await db.collection("PROBLEMS").aggregate([{$sample: {size: 10}}]).toArray();
+  const numOfProblems = JSON.parse(req.body).number;
+  console.log(numOfProblems);
+  let problemList = await db.collection("PROBLEMS").aggregate([{$sample: {size: Number(numOfProblems)}}]).toArray();
 
   problemList = problemList.map(p=>{
     if(p.image)

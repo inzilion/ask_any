@@ -59,9 +59,9 @@ export default function Modal({contents}) {
                     {contents.title}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500">
                       {contents.description.split('\n').map((e, i) => <p key={i}>{e}</p>)}
-                    </p>
+                    </div>
                   </div>
                   <div className="mt-4">
                     <button

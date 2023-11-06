@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/modal";
-const MAX_PROBLEM = 5;
+const MAX_PROBLEM = 20;
 
 export default function Practice(){
   const [ problemList, setProblemList ] = useState([]);
@@ -11,12 +11,20 @@ export default function Practice(){
   const [ userAnswer, setUserAnswer] = useState(Array(MAX_PROBLEM).fill(''));
   const [ modal, setModal ] = useState('');
   const [ ptr, setPtr] = useState(0);
-  
-  useEffect(()=>{
-    fetch('/api/problem/practice', { method: 'POST'})
+  const [ ready, setReady ] = useState(false);
+  const [ numberOfProblems, setNumberOfProblems ] = useState(5);
+
+  const getProblems = () => {
+    fetch('/api/problem/practice', { 
+      method: 'POST', 
+      body: JSON.stringify({number: numberOfProblems}) 
+    })
     .then(res=>res.json())
-    .then(result=>setProblemList(JSON.parse(result)))
-  }, [])
+    .then(result=>{
+      setProblemList(JSON.parse(result));
+      setReady(true);
+    })
+  }
 
   useEffect(()=>{
     setProblemData(problemList[ptr]);
@@ -24,7 +32,7 @@ export default function Practice(){
     setUserOptions(copyOptions.map(p=>p.map(op=>{op.isTrue = false; return op;})));
     }, [problemList])
 
-  useEffect(()=> ptr < MAX_PROBLEM ? setProblemData(problemList[ptr]) : "", [ptr]);
+  useEffect(()=> ptr < numberOfProblems ? setProblemData(problemList[ptr]) : "", [ptr]);
   
   const setUserOptionsHandler = (e, i) => {
     const copy = [...userOptions];
@@ -44,14 +52,14 @@ export default function Practice(){
 
   const showResult = () => {
     const descriptionArray = problemList.map((p, i) => {
+      if(i>=numberOfProblems) return '';
       let isRight = false;
-      if(p.options && (p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur, 0))) isRight = true;
-      if((p.answer == userAnswer[i])) isRight = true;
-      console.log(p.options, userAnswer[i])
+      if(p.options.length > 0 && (p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur, 0))) isRight = true;
+      if((p.answer != undefined) && (p.answer == userAnswer[i])) isRight = true;
       let resultStr = `${i+1}번: ${p.title}:`;
-      if(isRight) resultStr += "⭕";
-      else        resultStr += "❌"
-      return resultStr + "\n";
+      if(isRight) resultStr += "⭕\n";
+      else        resultStr += "❌\n"
+      return resultStr;
     })
     const description = descriptionArray.reduce((acc, cur)=> acc + cur, '');
     // const sumOptionRight = problemList.map((p, i) => p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur)).reduce((acc, cur) => acc + cur);
@@ -63,72 +71,98 @@ export default function Practice(){
   }
 
   return(
-    <div className="flex flex-col gap-1">
-      {modal}
-      {problemData ? 
-      <div className="flex flex-col divide-y">
-        <div className="bg-blue-100 p-2 text-black-100">{ptr+1}번 문제</div>
-        <div className="p-2 text-black-100">제목: {problemData.title}</div>
-        <div className="p-3">{problemData.description}</div>
-        <div className="flex justify-center">
-          {problemData.image ? <img className="w-1/3" src={problemData.image}/> : ""}
-        </div>
-        {problemData.type =="선택형"
-        ? <div className="flex-col flex gap-2 bg-blue-100 p-5">
-            {userOptions[ptr].map((e, i)=>
-              <div key={i} className="flex gap-2">
-                <div>
-                  <input 
-                    type="checkbox"
-                    checked={e.isTrue}
-                    onChange={(e)=>setUserOptionsHandler(e, i)}
-                  />
-                </div>
-                <div>
-                  {e.content}
-                </div>
+    <>
+      { ready 
+        ?
+        <div className="flex flex-col gap-1">
+          {modal}
+          {problemData ? 
+          <div className="flex flex-col divide-y">
+            <div className="bg-blue-100 p-2 text-black-100">{ptr+1}번 문제</div>
+            <div className="p-2 text-black-100">제목: {problemData.title}</div>
+            <div className="p-3">{problemData.description}</div>
+            <div className="flex justify-center">
+              {problemData.image ? <img className="w-1/3" src={problemData.image}/> : ""}
+            </div>
+            {problemData.type =="선택형"
+            ? <div className="flex-col flex gap-2 bg-blue-100 p-5">
+                {userOptions[ptr].map((e, i)=>
+                  <div key={i} className="flex gap-2">
+                    <div>
+                      <input 
+                        type="checkbox"
+                        checked={e.isTrue}
+                        onChange={(e)=>setUserOptionsHandler(e, i)}
+                      />
+                    </div>
+                    <div>
+                      {e.content}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        : <input
-            id='answer'
-            placeholder="정답을 입력하세요."
-            className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            onChange={(e)=>{setUserAnswerHandler(e)}}
-          />
-        }
-        <div className="flex justify-center p-3 gap-3">
-          {
-            ptr>0 ?
-              <button 
-                className="w-1/6 rounded-md bg-black bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                onClick={()=>{checkUserOptions(-1)}}
-              >
-                이전 문제
-              </button>
-            :''
-          }
-          {
-            ptr < MAX_PROBLEM-1  ?
-              <button 
-                className="w-1/6 rounded-md bg-green-600 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                onClick={()=>{checkUserOptions(1)}}
-              >
-                다음 문제
-              </button>
-
-            :
-              <button 
-                className="w-1/6 rounded-md bg-red-700 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                onClick={showResult}
-              >
-                결과보기
-              </button>
+            : <input
+                id='answer'
+                placeholder="정답을 입력하세요."
+                className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                onChange={(e)=>{setUserAnswerHandler(e)}}
+              />
             }
+            <div className="flex justify-center p-3 gap-3">
+              {
+                ptr>0 ?
+                  <button 
+                    className="w-1/6 rounded-md bg-black bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                    onClick={()=>{checkUserOptions(-1)}}
+                  >
+                    이전 문제
+                  </button>
+                :''
+              }
+              {
+                ptr < numberOfProblems-1  ?
+                  <button 
+                    className="w-1/6 rounded-md bg-green-600 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                    onClick={()=>{checkUserOptions(1)}}
+                  >
+                    다음 문제
+                  </button>
+    
+                :
+                  <button 
+                    className="w-1/6 rounded-md bg-red-700 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+                    onClick={showResult}
+                  >
+                    결과보기
+                  </button>
+                }
+            </div>
+          </div>
+          : ''
+          }
         </div>
-      </div>
-      : ''
+        :
+        <div className="flex-col pt-10 flex gap-5">
+          <div className="flex justify-center">연습할 문제 수를 선택하고 확인 버튼을 누르세요.</div>
+          <div className="flex justify-center gap-2">
+            <span>문제 수 : </span>
+            <select className="border " onChange={(e) => setNumberOfProblems(e.target.value)}>
+              <option defaultValue={5}>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+            </select>
+          </div>
+          <div className="flex justify-center">
+            <button 
+              className="w-1/6 rounded-md bg-green-700 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+              onClick={ getProblems }
+            >
+              확 인
+            </button>
+          </div>
+        </div>
       }
-    </div>
+    </>
   )
 }
