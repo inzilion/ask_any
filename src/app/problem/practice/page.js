@@ -62,9 +62,6 @@ export default function Practice(){
       return resultStr;
     })
     const description = descriptionArray.reduce((acc, cur)=> acc + cur, '');
-    // const sumOptionRight = problemList.map((p, i) => p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur)).reduce((acc, cur) => acc + cur);
-    // const sumAnswerRight = problemList.map((p, i) => !(p.answer == undefined || p.answer == '') && (p.answer == userAnswer[i])).reduce((acc, cur) => acc + cur);
-    // console.log(sumAnswerRight, sumOptionRight)
     const modalContents = { title:"결과", description: description, btnLabel: "확인" }
     setModal(<Modal contents={modalContents}/>)
 

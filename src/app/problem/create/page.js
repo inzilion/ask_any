@@ -6,10 +6,11 @@ import { useSession } from "next-auth/react";
 import { useState, useRef } from "react";
 import Modal from '@/components/modal';
 import  TextareaAutosize from "react-textarea-autosize";
-import { level, category, type } from '@/util/data';
+import { level, category, type, hidden } from '@/util/data';
 
 const mockData = {
   date: dayjs().toString(),
+  hidden: "공개",
   category: "상식",
   level: "상",
   type: "선택형",
@@ -82,6 +83,12 @@ export default function Create(){
   }
 
   const selectionData = {
+    hidden: {
+      id: 'hidden',
+      options: hidden,
+      handler: changeState,
+    },
+
     level: {
       id: 'level',
       options: level,
@@ -158,6 +165,7 @@ export default function Create(){
       {modal}
       <div className="m-5 flex gap-4 flex-col">
         <div className="flex-col flex gap-2 justify-between">
+          <Selection content="공개" {...selectionData.hidden}/>
           <Selection content="분야" {...selectionData.category}/>
           <Selection content="난이도" {...selectionData.level}/>
           <Selection content="문제유형" {...selectionData.type}/>
