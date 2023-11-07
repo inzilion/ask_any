@@ -11,7 +11,7 @@ export default function ProblemList({isSelected, list, title, handler})
               ? <div 
                   className= "bg-green-300 hover:cursor-pointer"
                   key={i}
-                  onClick={(e)=>{handler(e, i)}}
+                  onClick={()=>{handler(i)}}
                 >
                   {p.category}: {p.title}
                 </div> 
@@ -19,7 +19,7 @@ export default function ProblemList({isSelected, list, title, handler})
                 <div 
                   className= "hover:bg-green-400 hover:cursor-pointer"
                   key={i}
-                  onClick={(e)=>{handler(e, i)}}
+                  onClick={()=>{handler(i)}}
                 >
                   {p.category}: {p.title}
                 </div>) 

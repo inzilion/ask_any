@@ -20,7 +20,8 @@
     "next-auth": "^4.23.2",
     "react": "^18",
     "react-dom": "^18",
-    "react-textarea-autosize": "^8.5.3"
+    "react-textarea-autosize": "^8.5.3",
+    "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",

@@ -32,13 +32,13 @@ export default function Create(){
     })
   },[]);
 
-  const setProblemListHandler = (e, i) => {
+  const setProblemListHandler = (i) => {
     let copy = [...problemList];
     copy[i].isSelected = copy[i].isSelected ? false : true;
     setProblemList(copy);
   };
 
-  const setSelectedProblemListHandler = (e, i) => {
+  const setSelectedProblemListHandler = (i) => {
     let copy = [...selectedProblemList];
     copy[i].isSelected = copy[i].isSelected ? false : true;
     setSelectedProblemList(copy);
@@ -46,26 +46,26 @@ export default function Create(){
 
 
   const moveToSelectedList = () => {
-    let selectedCopy = problemList.map(e => {
-      if(e.isSelected) {
-        e.isSelected = false;
-        return e;
-      }
-    }).filter(e=>e!=undefined)
-    ;
-    console.log(selectedCopy);
-    setSelectedProblemList(selectedCopy);
+    let selectedCopy = JSON.parse(JSON.stringify(problemList.filter(e=>e.isSelected)));
+    let originCopy = problemList.filter(e => !e.isSelected);
+
+    selectedCopy = selectedCopy.map(e => {e.isSelected = false; return e;});
+
+    setProblemList([...originCopy])
+    setSelectedProblemList([...selectedProblemList, ...selectedCopy]);
   };
 
   const moveToOriginList = () => {
+    let selectedCopy = JSON.parse(JSON.stringify(selectedProblemList.filter(e=>e.isSelected)));
+    let originCopy = selectedProblemList.filter(e => !e.isSelected);
+
+    selectedCopy = selectedCopy.map(e => {e.isSelected = false; return e;});
+
+    setSelectedProblemList([...originCopy])
+    setProblemList([...problemList, ...selectedCopy]);
 
   }
 
-
-  const changeState = (e) => {
-    let copy = {...contest};   
-  }
-  
   const createContest = () => {
     fetch('/api/contest/create', {
       method: 'POST',
@@ -94,9 +94,9 @@ export default function Create(){
       />
 
   return(
-    <div>
+    <div className="scrollbar-hide">
       {modal}
-      <div className=" flex gap-5 flex-col m-5 ">
+      <div className=" flex gap-5 flex-col m-5 scrollbar-hide">
         <div className="flex items-center gap-3">
           <div> 시작 시간 : </div>
           <input type="datetime-local" defaultValue={(new Date().toISOString().slice(0, 19))}/>
@@ -138,7 +138,7 @@ export default function Create(){
         <button
           type="button"
           onClick={createContest}
-          className="rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="absolute top-0 left-0 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           대회 만들기
         </button>
