@@ -1,7 +1,7 @@
 'use client'
 import dayjs from "@/util/myDay";
 import { useSession } from "next-auth/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Modal from '@/components/modal';
 
 const mockData = {
@@ -14,12 +14,21 @@ const mockData = {
 
 export default function Create(){
   const { data: session } = useSession();
-  const [ contest, setContest] = useState(mockData);
-  const [modal, setModal] = useState('');
+  const [ contest, setContest ] = useState(mockData);
+  const [ modal, setModal ] = useState('');
+  const [ problemList, setProblemList ] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/contest/list",{ method: "POST",})
+    .then(res=>res.json())
+    .then(list=>{
+      setProblemList(JSON.parse(list));
+    })
+  },[]);
+
 
   const changeState = (e) => {
-    let copy = {...contest};
-    
+    let copy = {...contest};   
   }
   
   const createContest = () => {
@@ -64,13 +73,21 @@ export default function Create(){
           </div>
         </div>
 
-        <div>
+        <div className="flex items-center">
+          <label>제목 : </label>
           <input
             id='title'
             placeholder="대회 제목을 입력하세요"
-            className="block w-full rounded-md border-0 py-1.5 pl-3 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            className="w-1/2 rounded-md border-0 py-1.5 pl-3 pr-20 ml-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={(e)=>changeState(e)}
           />
+        </div>
+        <div className="border-1">
+        {
+          problemList.length > 0 
+          ? problemList.map((p, i) => <div key={i}>{p._id}: {p.category}: {p.title}</div>) 
+          : ""
+        }
         </div>
         <button
           type="button"

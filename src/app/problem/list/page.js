@@ -8,13 +8,13 @@ export default async function List(){
   const session = await getServerSession(authOptions);
   const db = client.db("ASK_ANY");
   const list = await db.collection('PROBLEMS').find()
-    .project({title: 1, author: 1, countRight: 1, countTry: 1}).sort({_id:-1}).toArray();
+    .project({title: 1, author: 1, countRight: 1, countTry: 1, hidden: 1}).sort({_id:-1}).toArray();
   const userData = await db.collection('USERS').findOne({email: session?.user?.email});
   return(
     <>
       <ul className="divide-y divide-gray-300 p-2">
         {list.map((item, i) => {
-          if(item.hidden == undefined || item.hidden == "공개") 
+          if(item.hidden == undefined || item.hidden == "공개" || session?.user?.email == "inzilion@gmail.com") 
           return (
             <li key={i} className="flex justify-between gap-x-6 py-2">
               <div className="flex min-w-0 gap-x-4 pl-3">

@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import Modal from '@/components/modal';
 import  TextareaAutosize from "react-textarea-autosize";
-import { level, category, type } from '@/util/data';
+import { level, category, type, hidden } from '@/util/data';
 
 export default function Edit(props){
   const { data: session } = useSession();
@@ -94,6 +94,12 @@ export default function Edit(props){
   }
 
   const selectionData = {
+    hidden: {
+      id: 'hidden',
+      options: hidden,
+      handler: changeState,
+    },
+
     level: {
       id: 'level',
       options: level,
@@ -171,6 +177,7 @@ export default function Edit(props){
       {modal}
       <div className="m-5 flex gap-4 flex-col">
         <div className="flex-col flex gap-2 justify-between">
+         <Selection content="공개" {...selectionData.hidden} value={problemData.hidden}/>
           <Selection content="분야" {...selectionData.category} value={problemData.category}/>
           <Selection content="난이도" {...selectionData.level} value={problemData.level}/>
           <Selection content="문제유형" {...selectionData.type} value={problemData.type}/>
