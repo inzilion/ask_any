@@ -1,4 +1,4 @@
-export default function ProblemList({list, title})
+export default function ProblemList({isSelected, list, title, handler})
 {
   return(
     <>
@@ -7,10 +7,19 @@ export default function ProblemList({list, title})
         <div className="container border-4 h-1/3 overflow-auto">
           {
             list.length > 0 
-            ? list.map((p, i) => 
+            ? list.map((p, i) => p.isSelected 
+              ? <div 
+                  className= "bg-green-300 hover:cursor-pointer"
+                  key={i}
+                  onClick={(e)=>{handler(e, i)}}
+                >
+                  {p.category}: {p.title}
+                </div> 
+              :
                 <div 
                   className= "hover:bg-green-400 hover:cursor-pointer"
                   key={i}
+                  onClick={(e)=>{handler(e, i)}}
                 >
                   {p.category}: {p.title}
                 </div>) 

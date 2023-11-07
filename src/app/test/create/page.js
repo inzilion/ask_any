@@ -26,9 +26,40 @@ export default function Create(){
     fetch("/api/contest/list",{ method: "POST",})
     .then(res=>res.json())
     .then(list=>{
-      setProblemList(JSON.parse(list));
+      list = JSON.parse(list);
+      list = list.map(e => {e.isSelected = false; return e;})
+      setProblemList(list);
     })
   },[]);
+
+  const setProblemListHandler = (e, i) => {
+    let copy = [...problemList];
+    copy[i].isSelected = copy[i].isSelected ? false : true;
+    setProblemList(copy);
+  };
+
+  const setSelectedProblemListHandler = (e, i) => {
+    let copy = [...selectedProblemList];
+    copy[i].isSelected = copy[i].isSelected ? false : true;
+    setSelectedProblemList(copy);
+  };
+
+
+  const moveToSelectedList = () => {
+    let selectedCopy = problemList.map(e => {
+      if(e.isSelected) {
+        e.isSelected = false;
+        return e;
+      }
+    }).filter(e=>e!=undefined)
+    ;
+    console.log(selectedCopy);
+    setSelectedProblemList(selectedCopy);
+  };
+
+  const moveToOriginList = () => {
+
+  }
 
 
   const changeState = (e) => {
@@ -65,7 +96,7 @@ export default function Create(){
   return(
     <div>
       {modal}
-      <div className=" flex gap-2 flex-col m-5 ">
+      <div className=" flex gap-5 flex-col m-5 ">
         <div className="flex items-center gap-3">
           <div> 시작 시간 : </div>
           <input type="datetime-local" defaultValue={(new Date().toISOString().slice(0, 19))}/>
@@ -86,22 +117,30 @@ export default function Create(){
             onChange={(e)=>changeState(e)}
           />
         </div>
-        <div className="flex gap-3">
-          <ProblemList list={problemList} title="모든 문제"/>
-          <div className="flex flex-col gap-3 mt-40">
-            <FontAwesomeIcon style={{color: "green", fontSize: "30px"}} icon={faArrowAltCircleRight}/>
-            <FontAwesomeIcon style={{color: "red", fontSize: "30px"}} icon={faArrowAltCircleLeft}/>
+        <div className="flex gap-3 flex justify-between">
+          <ProblemList isSelected={false} list={problemList} title="모든 문제" handler={setProblemListHandler}/>
+          <div className="flex flex-col gap-10 mt-40">
+            <FontAwesomeIcon 
+              className="hover:cursor-pointer" 
+              style={{color: "green", fontSize: "30px"}} 
+              icon={faArrowAltCircleRight}
+              onClick={moveToSelectedList}
+            />
+            <FontAwesomeIcon 
+              className="hover:cursor-pointer" 
+              style={{color: "red", fontSize: "30px"}} 
+              icon={faArrowAltCircleLeft}
+              onClick={moveToOriginList}
+            />
           </div>
-          <ProblemList list={selectedProblemList} title="대회 출제 문제"/>
+          <ProblemList isSelected={true} list={selectedProblemList} title="대회 출제 문제" handler={setSelectedProblemListHandler}/>
         </div>
-        
-
         <button
           type="button"
           onClick={createContest}
           className="rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          대회 등록
+          대회 만들기
         </button>
       </div>        
     </div>
