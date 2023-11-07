@@ -1,8 +1,11 @@
 'use client'
 import dayjs from "@/util/myDay";
 import { useSession } from "next-auth/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Modal from '@/components/modal';
+import ProblemList from "@/components/contest/problemList";
+import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const mockData = {
   startDate: dayjs().toString(),
@@ -17,6 +20,7 @@ export default function Create(){
   const [ contest, setContest ] = useState(mockData);
   const [ modal, setModal ] = useState('');
   const [ problemList, setProblemList ] = useState([]);
+  const [ selectedProblemList, setSelectedProblemList] = useState([]);
 
   useEffect(() => {
     fetch("/api/contest/list",{ method: "POST",})
@@ -82,13 +86,16 @@ export default function Create(){
             onChange={(e)=>changeState(e)}
           />
         </div>
-        <div className="border-1">
-        {
-          problemList.length > 0 
-          ? problemList.map((p, i) => <div key={i}>{p._id}: {p.category}: {p.title}</div>) 
-          : ""
-        }
+        <div className="flex gap-3">
+          <ProblemList list={problemList} title="모든 문제"/>
+          <div className="flex flex-col gap-3 mt-40">
+            <FontAwesomeIcon style={{color: "green", fontSize: "30px"}} icon={faArrowAltCircleRight}/>
+            <FontAwesomeIcon style={{color: "red", fontSize: "30px"}} icon={faArrowAltCircleLeft}/>
+          </div>
+          <ProblemList list={selectedProblemList} title="대회 출제 문제"/>
         </div>
+        
+
         <button
           type="button"
           onClick={createContest}
