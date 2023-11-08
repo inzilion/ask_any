@@ -29,7 +29,7 @@ export default function ContestPeriod({handler, startTime, endTime}){
         <input 
           id='endTime'
           type="datetime-local" 
-          defaultValue={endTime.toISOString().slice(0, 19)}
+          value={endTime.toISOString().slice(0, 19)}
           onChange={(e)=>handler(e)}
         />
       </div>

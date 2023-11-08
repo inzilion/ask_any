@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contestType } from '@/util/data';
 import Selection from '@/components/selection';
 import ContestPeriod from '@/components/contest/contestPeriod';
+import { RemoveScrollBar,noScrollbarsClassName, fullWidthClassName  } from "react-remove-scroll-bar";
 
 const timeOffset = 1000*60*60*9;
 const mockData = {
@@ -77,19 +78,19 @@ export default function Create(){
     endTime: (copy, e) => copy.endTime = new Date(e.target.value),
     period: (copy, e) => {
       copy.period = e.target.value;
-      copy.endTime = new Date(copy.startTime.getTime() + 1000 * 60 * copy.period);
+      copy.endTime = new Date(copy.startTime.getTime() + timeOffset + 1000 * 60 * copy.period);
     },
   }
 
   const setContestHandler = (e) => {
     const copy = {...contest};
-    console.log(e.target.id, e.target.value)
+//    console.log(e.target.id, e.target.value)
     try{
       contestHandlerMap[e.target.id](copy, e);
     } catch {
       copy[e.target.id] = e.target.value;
     }
-    console.log(copy);
+//    console.log(copy);
     setContest(copy);
   }
 
@@ -129,9 +130,10 @@ export default function Create(){
       />
 
   return(
-    <div className="scrollbar-hide">
+    <div className={noScrollbarsClassName}>
+      <RemoveScrollBar/>
       {modal}
-      <div className=" flex gap-5 flex-col m-5 scrollbar-hide">
+      <div className="flex gap-5 flex-col m-5">
         <Selection content="대회 유형" {...selectionData.contestType}/>
         <ContestPeriod handler={setContestHandler} startTime={contest.startTime} endTime={contest.endTime} />
 
@@ -163,13 +165,15 @@ export default function Create(){
           </div>
           <ProblemList isSelected={true} list={selectedProblemList} title="대회 출제 문제" handler={setSelectedProblemListHandler}/>
         </div>
-        <button
-          type="button"
-          onClick={createContest}
-          className="rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          대회 만들기
-        </button>
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={createContest}
+            className="absolute bottom-0 w-1/2 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          >
+            대회 만들기
+          </button>
+        </div>
       </div>        
     </div>
   )
