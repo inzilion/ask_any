@@ -6,13 +6,20 @@ import Modal from '@/components/modal';
 import ProblemList from "@/components/contest/problemList";
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { contestType } from '@/util/data';
+import Selection from '@/components/selection';
+import ContestPeriod from '@/components/contest/contestPeriod';
 
+const timeOffset = 1000*60*60*9;
 const mockData = {
-  startDate: dayjs().toString(),
-  endDate: dayjs().toString(),
+  contestType: "모의평가",
+  startTime: new Date(new Date().getTime() + timeOffset),
+  endTime: new Date(new Date().getTime() + timeOffset + 1000*60*10),
+  period: 10,
   title: '대회 제목을 입력하세요.',
   problems: [],
   participants: [],
+  isFinished: false,
 }
 
 export default function Create(){
@@ -44,7 +51,6 @@ export default function Create(){
     setSelectedProblemList(copy);
   };
 
-
   const moveToSelectedList = () => {
     let selectedCopy = JSON.parse(JSON.stringify(problemList.filter(e=>e.isSelected)));
     let originCopy = problemList.filter(e => !e.isSelected);
@@ -66,6 +72,27 @@ export default function Create(){
 
   }
 
+  const contestHandlerMap = {
+    startTime: (copy, e) => copy.startTime = new Date(e.target.value),
+    endTime: (copy, e) => copy.endTime = new Date(e.target.value),
+    period: (copy, e) => {
+      copy.period = e.target.value;
+      copy.endTime = new Date(copy.startTime.getTime() + 1000 * 60 * copy.period);
+    },
+  }
+
+  const setContestHandler = (e) => {
+    const copy = {...contest};
+    console.log(e.target.id, e.target.value)
+    try{
+      contestHandlerMap[e.target.id](copy, e);
+    } catch {
+      copy[e.target.id] = e.target.value;
+    }
+    console.log(copy);
+    setContest(copy);
+  }
+
   const createContest = () => {
     fetch('/api/contest/create', {
       method: 'POST',
@@ -84,7 +111,15 @@ export default function Create(){
     });
     setContest(mockData);
   }
-  
+
+  const selectionData = {
+    contestType: {
+      id: 'contestType',
+      options: contestType,
+      handler: setContestHandler,
+    },
+  }
+
   if(!session) 
     return 
       <Modal contents={{ 
@@ -97,16 +132,8 @@ export default function Create(){
     <div className="scrollbar-hide">
       {modal}
       <div className=" flex gap-5 flex-col m-5 scrollbar-hide">
-        <div className="flex items-center gap-3">
-          <div> 시작 시간 : </div>
-          <input type="datetime-local" defaultValue={(new Date().toISOString().slice(0, 19))}/>
-        </div>
-        <div className="flex items-center gap-3">
-          <div> 소요 시간 : </div>
-          <div>
-            <input type="number" defaultValue={10} className="text-right bg-red-200 w-1/4"/>분
-          </div>
-        </div>
+        <Selection content="대회 유형" {...selectionData.contestType}/>
+        <ContestPeriod handler={setContestHandler} startTime={contest.startTime} endTime={contest.endTime} />
 
         <div className="flex items-center">
           <label>제목 : </label>
@@ -114,9 +141,10 @@ export default function Create(){
             id='title'
             placeholder="대회 제목을 입력하세요"
             className="w-1/2 rounded-md border-0 py-1.5 pl-3 pr-20 ml-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            onChange={(e)=>changeState(e)}
+            onChange={(e)=>setContestHandler(e)}
           />
         </div>
+        
         <div className="flex gap-3 flex justify-between">
           <ProblemList isSelected={false} list={problemList} title="모든 문제" handler={setProblemListHandler}/>
           <div className="flex flex-col gap-10 mt-40">
@@ -138,7 +166,7 @@ export default function Create(){
         <button
           type="button"
           onClick={createContest}
-          className="absolute top-0 left-0 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           대회 만들기
         </button>
