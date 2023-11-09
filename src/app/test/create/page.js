@@ -1,5 +1,4 @@
 'use client'
-import dayjs from "@/util/myDay";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Modal from '@/components/modal';
@@ -17,7 +16,7 @@ const mockData = {
   startTime: new Date(new Date().getTime() + timeOffset),
   endTime: new Date(new Date().getTime() + timeOffset + 1000*60*10),
   period: 10,
-  title: '대회 제목을 입력하세요.',
+  title: '',
   problems: [],
   participants: [],
   isFinished: false,
@@ -31,7 +30,7 @@ export default function Create(){
   const [ selectedProblemList, setSelectedProblemList] = useState([]);
 
   useEffect(() => {
-    fetch("/api/contest/list",{ method: "POST",})
+    fetch("/api/contest/problemList",{ method: "POST",})
     .then(res=>res.json())
     .then(list=>{
       list = JSON.parse(list);
@@ -80,39 +79,67 @@ export default function Create(){
       copy.period = e.target.value;
       copy.endTime = new Date(copy.startTime.getTime() + timeOffset + 1000 * 60 * copy.period);
     },
+    create:(copy, e) => copy.problems = selectedProblemList.map(p=>p._id),
   }
 
   const setContestHandler = (e) => {
     const copy = {...contest};
-//    console.log(e.target.id, e.target.value)
     try{
       contestHandlerMap[e.target.id](copy, e);
     } catch {
       copy[e.target.id] = e.target.value;
     }
-//    console.log(copy);
     setContest(copy);
   }
 
-  const createContest = () => {
-    fetch('/api/contest/create', {
+  const createContest = (e) => {
+    if(!contest.title){
+      setModal(
+        <Modal contents={{ 
+          title:"입력오류", 
+          description: "대회 제목을 입력하세요.",
+          btnLabel: "확인"}}
+        />) 
+      setTimeout(() => setModal(''), 3000);
+      return;
+    }
+    if(!selectedProblemList.length){
+      setModal(
+        <Modal contents={{ 
+          title:"문제선택 오류", 
+          description: "문제를 선택하세요.",
+          btnLabel: "확인"}}
+        />) 
+      setTimeout(() => setModal(''), 3000);
+      return;
+    }
+
+    setContestHandler(e);
+  }
+
+  useEffect(()=>{
+  if(!contest.problems.length) return;
+
+  fetch('/api/contest/create', {
       method: 'POST',
-      body: JSON.stringify(setContest),
+      body: JSON.stringify(contest),
     })
     .then(res=>res.json())
     .then(json=>{
       setModal(
         <Modal contents={{ 
           title:"등록완료", 
-          description: "문제 등록이 완료되었습니다.",
+          description: "대회 등록이 완료되었습니다.",
           btnLabel: "확인"}}
         />
       );
-      setTimeout(()=>setModal(''), 5000);
+      setTimeout(()=>setModal(''), 3000);
     });
     setContest(mockData);
-  }
 
+  }, [contest.problems])
+
+  
   const selectionData = {
     contestType: {
       id: 'contestType',
@@ -166,8 +193,9 @@ export default function Create(){
         </div>
         <div className="flex justify-center">
           <button
+            id='create'
             type="button"
-            onClick={createContest}
+            onClick={(e)=>createContest(e)}
             className="absolute bottom-5 w-1/2 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
           >
             대회 만들기
