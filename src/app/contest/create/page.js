@@ -18,7 +18,9 @@ const mockData = {
   period: 10,
   title: '',
   problems: [],
+  numOfProblems: 0,
   participants: [],
+  numOfParticipants: 0,
   isFinished: false,
 }
 
@@ -79,7 +81,10 @@ export default function Create(){
       copy.period = e.target.value;
       copy.endTime = new Date(copy.startTime.getTime() + timeOffset + 1000 * 60 * copy.period);
     },
-    create:(copy, e) => copy.problems = selectedProblemList.map(p=>p._id),
+    create:(copy, e) => {
+      copy.problems = selectedProblemList.map(p=>p._id);
+      copy.numOfProblems = selectedProblemList.length;
+    },
   }
 
   const setContestHandler = (e) => {
