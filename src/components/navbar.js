@@ -23,17 +23,17 @@ export default function Navbar(){
     },
     {
       name: "연습",
-      href: "/problem/practice",
+      href: "/practice",
       isMobile: isMobile,
     },
     {
       name: "대회",
-      href: "/problem/contest",
+      href: "/contest/list",
       isMobile: isMobile,
     },
     {
       name: "순위",
-      href: "/problem/rank",
+      href: "/rank",
       isMobile: isMobile,
     },
   ];
