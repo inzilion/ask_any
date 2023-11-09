@@ -7,7 +7,7 @@ export default function Navbar(){
   const isMobile = (isTrue) => isTrue ? menuItemClassNameMobile : menuItemClassName ;
   const menuItems = [
     {
-      name: "홈",
+      name: "어쩌다",
       href: "/",
       isMobile: isMobile,
     },
