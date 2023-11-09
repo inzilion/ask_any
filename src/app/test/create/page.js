@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contestType } from '@/util/data';
 import Selection from '@/components/selection';
 import ContestPeriod from '@/components/contest/contestPeriod';
-import { RemoveScrollBar,noScrollbarsClassName, fullWidthClassName  } from "react-remove-scroll-bar";
+import { RemoveScrollBar, noScrollbarsClassName, fullWidthClassName  } from "react-remove-scroll-bar";
 
 const timeOffset = 1000*60*60*9;
 const mockData = {
@@ -130,8 +130,7 @@ export default function Create(){
       />
 
   return(
-    <div className={noScrollbarsClassName}>
-      <RemoveScrollBar/>
+    <div className={fullWidthClassName}>
       {modal}
       <div className="flex gap-5 flex-col m-5">
         <Selection content="대회 유형" {...selectionData.contestType}/>
@@ -169,7 +168,7 @@ export default function Create(){
           <button
             type="button"
             onClick={createContest}
-            className="absolute bottom-0 w-1/2 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            className="absolute bottom-5 w-1/2 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
           >
             대회 만들기
           </button>
