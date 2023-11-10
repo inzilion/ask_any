@@ -9,16 +9,11 @@ export default function AllProblemList({problemList, userData}){
   const [ currentPage, setCurrentPage] = useState(1);
   const [ currentList, setCurrentList] = useState([])
 
-  useEffect(() => {
-    setCurrentList(problemList.slice(currentPage*10-10, currentPage*10));
-  }, [currentPage])
+  useEffect(() => setCurrentList(problemList.slice(0,10)), [])
 
-  useEffect(() => {setCurrentList(problemList.slice(0,10))}, [])
+  useEffect(() => setCurrentList(problemList.slice(currentPage*10-10, currentPage*10)), [currentPage])
 
-  const setCurrentPageHandler = (e, i) => {
-    setCurrentPage(i);
-    console.log(i)
-  };
+  const setCurrentPageHandler = (e, i) =>  setCurrentPage(i);
   
   return (
     <>
