@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/common/modal";
 import { useSession } from "next-auth/react";
+import Button from '@/components/common/button';
 
 export default function Id({params}){
   const { data: session } = useSession();
@@ -49,10 +50,12 @@ export default function Id({params}){
     let modalContents = ''
     if (result.length)  modalContents = { title:"오답", description: "틀렸습니다.", btnLabel: "확인" }
     else                modalContents = { title:"정답", description: "정답입니다.", btnLabel: "확인" }
+    
     setModal(<Modal contents={modalContents}/>)
     setTimeout(() => {
       setModal('')
     }, 3000);
+    
     const countRight = modalContents.title ==="정답" ? 1 : 0;
     fetch('/api/problem/counter', {
         method: "POST",

@@ -7,6 +7,7 @@ import { useState, useRef } from "react";
 import Modal from '@/components/common/modal';
 import  TextareaAutosize from "react-textarea-autosize";
 import { level, category, type, hidden } from '@/util/data';
+import Button from '@/components/common/button';
 
 const mockData = {
   date: dayjs().toString(),
@@ -213,13 +214,7 @@ export default function Create(){
           : ""
           }
         </div>
-        <button
-          type="button"
-          onClick={createProblem}
-          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          문제 등록
-        </button>
+        <Button color={"green"} size={"full"} caption={"문 제 등 록"} handler={createProblem}/>
       </div>        
     </div>
   )
