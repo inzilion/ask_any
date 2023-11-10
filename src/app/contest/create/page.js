@@ -1,12 +1,12 @@
 'use client'
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import Modal from '@/components/modal';
+import Modal from '@/components/common/modal';
 import ProblemList from "@/components/contest/problemList";
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { contestType } from '@/util/data';
-import Selection from '@/components/selection';
+import Selection from '@/components/common/selection';
 import ContestPeriod from '@/components/contest/contestPeriod';
 import { RemoveScrollBar, noScrollbarsClassName, fullWidthClassName  } from "react-remove-scroll-bar";
 

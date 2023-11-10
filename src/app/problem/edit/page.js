@@ -1,9 +1,9 @@
 'use client'
-import Selection from "@/components/selection";
-import Options from "@/components/options";
+import Selection from "@/components/common/selection";
+import Options from "@/components/problem/options";
 import { useSession } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
-import Modal from '@/components/modal';
+import Modal from '@/components/common/modal';
 import  TextareaAutosize from "react-textarea-autosize";
 import { level, category, type, hidden } from '@/util/data';
 

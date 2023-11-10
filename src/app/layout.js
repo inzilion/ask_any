@@ -1,4 +1,4 @@
-import Navbar from '@/components/navbar'
+import Navbar from '@/components/common/navbar'
 import './globals.css'
 import MySessionProvider from './mySessionProvider'
 import "@fortawesome/fontawesome-svg-core/styles.css"

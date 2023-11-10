@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from "react"
-import Modal from "@/components/modal";
+import Modal from "@/components/common/modal";
 const MAX_PROBLEM = 20;
 
 export default function Practice(){

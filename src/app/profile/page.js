@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Modal from '@/components/modal';
+import Modal from '@/components/common/modal';
 
 export default function Profile(){
   const [ userData, setUserData ] = useState('');
