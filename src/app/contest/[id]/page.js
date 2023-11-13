@@ -12,7 +12,7 @@ export default function Id({params}){
   return(
     <>
       {
-        ! true//isReday
+        ! isReday
         ? <Guide handler={setIsReadyHandler}/>
         : <ContestMain contestID={params.id}/>
       }
