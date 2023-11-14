@@ -3,9 +3,17 @@ import { ObjectId } from 'mongodb';
 import fs from "fs";
 
 export default async function handler(req, res){
-  const contestID = JSON.parse(req.body).contestID;
+  const receiveData = JSON.parse(req.body);
   const db = client.db("ASK_ANY");
-  const contest = await db.collection('CONTESTS').findOne({_id: new ObjectId(contestID)})
+  const contest = await db.collection('CONTESTS').findOne({_id: new ObjectId(receiveData.contestID)})
+
+  if(contest.participants.filter(p=>p.email == receiveData.email).length)
+    return res.json(JSON.stringify({title: "Already joined user"}));
+
+  console.log(await db.collection('CONTESTS').updateOne(
+      { _id: new ObjectId(receiveData.contestID) },
+      { $addToSet: { participants: { email: receiveData.email, answers:{}, result:0 , remainTime:0 } } }
+  ))
 
   let problemList = await db.collection('PROBLEMS').find({_id: { $in: contest.problems.map(p=> new ObjectId(p))}}).toArray(); 
   

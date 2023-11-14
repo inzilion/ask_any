@@ -1,45 +1,48 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ShowProblem from './showProblem'
 import ShowBottomButtons from './showBottomButtons'
 import Loading from '../common/loading'
+import Timer from './timer'
 
-export default function ContestMain({contestID}){
+export default function ContestMain({contestID, email}){
   const [ contest, setContest ] = useState('')
   const [ userAnswers, setUserAnswers ] = useState('')
   const [ currentPtr, setCurrentPtr ] = useState(0);
   const [ isLoadData, setIsLoadData ] = useState(false);
+  const answerInput = useRef();
 
   useEffect(()=>{
-    fetch('/api/contest/get', { method: "POST", body: JSON.stringify({contestID: contestID})})
+    fetch('/api/contest/get', { method: "POST", body: JSON.stringify({contestID: contestID, email: email})})
     .then(res=>res.json())
     .then(contest=>setContest(JSON.parse(contest)))
   },[])
 
   useEffect(()=>{
     if(contest.problems == undefined) return;
+    if(contest.title == "Already joined user") return console.log(contest.title);
     
     const copy = JSON.parse(JSON.stringify(contest.problems));
     setUserAnswers(copy.map((p, i)=>{
-      if(p.type === "선택형") return p.options.map((op, j) => {op.isTrue = false; return op});
-      if(p.type === "단답형") return p.answer = '';
+      if(p.type === "선택형") return { options: p.options.map((op, j) => {op.isTrue = false; return op}), answer:''};
+      if(p.type === "단답형") return { options: [], answer: ''};
     }))
   },[contest])
 
   useEffect(()=>{
     if(!userAnswers || !contest) return;
-    console.log(contest);
-    console.log(userAnswers);
+    // console.log(contest);
+    // console.log(userAnswers);
     setIsLoadData(true);
   }, [userAnswers]);
 
   const setUserAnswersHandler = (e, i) => {
-    if(e.target.id === "선택형")
-      return setUserAnswers(answers => {answers[currentPtr] = e.target.value; return answers});
+    if(e.target.id === "answer")
+      return setUserAnswers(answers => { answers[currentPtr].answer = e.target.value; return answers });
     
     const copy = [...userAnswers];
-    copy[currentPtr].map((op, j) => {
+    copy[currentPtr].options.map((op, j) => {
       op.isTrue = i==j ? e.target.checked : op.isTrue;
       return op;
     })
@@ -50,20 +53,24 @@ export default function ContestMain({contestID}){
     if(e.target.id == 'nextButton') setCurrentPtr(currentPtr+1);
     if(e.target.id == 'preButton') setCurrentPtr(currentPtr-1);
     if(e.target.id == 'submitButton') setCurrentPtr(0);
+    if(answerInput.current) answerInput.current.value = "";
   }
 
   return(
     <>
       <div>
-        <div className='text-xl text-center p-5'>대회번호 : {contestID}</div>
         <div>
         {
           isLoadData
           ? <div>
+              <div className='flex justify-end text-red-500'>
+                <Timer limit={contest.period}/>
+              </div>
               <ShowProblem 
                 problemData={contest.problems[currentPtr]} 
                 userData={userAnswers[currentPtr]}
                 handler={setUserAnswersHandler}
+                refer = {answerInput}
               />
               <ShowBottomButtons 
                 numOfProblems={contest.numOfProblems} 
@@ -71,8 +78,9 @@ export default function ContestMain({contestID}){
                 handler={setCurrentPtrHandler} 
               />
             </div>
-          : <Loading/>
+          : <Loading/> 
         }
+        {contest.title}
         </div>
       </div>
     </>
