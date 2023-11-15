@@ -16,7 +16,7 @@ export default function Guide({handler}){
         </div>
         { 
           isChecked
-          ? <Button size={"1/3"} color={"red"} caption={"시 작"} handler={handler}/>
+          ? <Button size={"1/4"} color={'green'} caption={"시 작"} handler={handler}/>
           : ""
         }  
       </div>

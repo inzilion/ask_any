@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import ShowProblem from './showProblem'
 import ShowBottomButtons from './showBottomButtons'
-import Loading from '../common/loading'
+import Msg from '../common/msg'
 import Timer from './timer'
 
 export default function ContestMain({contestID, email}){
@@ -21,7 +21,6 @@ export default function ContestMain({contestID, email}){
 
   useEffect(()=>{
     if(contest.problems == undefined) return;
-    if(contest.title == "Already joined user") return console.log(contest.title);
     
     const copy = JSON.parse(JSON.stringify(contest.problems));
     setUserAnswers(copy.map((p, i)=>{
@@ -78,9 +77,10 @@ export default function ContestMain({contestID, email}){
                 handler={setCurrentPtrHandler} 
               />
             </div>
-          : <Loading/> 
+          : <div> 
+              <Msg msg="로딩중..."/>
+            </div>
         }
-        {contest.title}
         </div>
       </div>
     </>
