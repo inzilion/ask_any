@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export default function Timer({limit}){
+export default function Timer({limit , handler}){
   const getSeconds = (time) => {
       const seconds = Number(time % 60);
       if(seconds < 10) {
@@ -15,6 +15,7 @@ export default function Timer({limit}){
   useEffect(() => {
       const timer = setInterval(() => {
           setTime((prev) => prev - 1);
+          handler(time);
       }, 1000);
       return () => clearInterval(timer);
   }, []);
