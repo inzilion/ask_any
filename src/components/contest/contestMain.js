@@ -14,6 +14,8 @@ export default function ContestMain({contestID, email}){
   const [ isLoadData, setIsLoadData ] = useState(false);
   const [ remainTime, setRemainTime ] = useState(0);
   const [ modal, setModal ] = useState('');
+  const [ isEverythingOK, setIsEverythingOK ] = useState(false);
+  const [ msg, setMsg ] = useState('로딩중...')
   const answerInput = useRef();
 
   useEffect(()=>{
@@ -34,8 +36,6 @@ export default function ContestMain({contestID, email}){
 
   useEffect(()=>{
     if(!userAnswers || !contest) return;
-    // console.log(contest);
-    // console.log(userAnswers);
     setIsLoadData(true);
   }, [userAnswers]);
 
@@ -43,7 +43,11 @@ export default function ContestMain({contestID, email}){
     if(answerInput.current) answerInput.current.value = userAnswers[currentPtr].answer || '';   
   }, [currentPtr]);
   
-  
+  useEffect(()=>{
+    if(isEverythingOK) transferUserAnswers();
+  },[isEverythingOK]);
+
+
   const setUserAnswersHandler = (e, i) => {
     if(e.target.id === "answer")
       return setUserAnswers(answers => { answers[currentPtr].answer = e.target.value; return answers });
@@ -56,18 +60,27 @@ export default function ContestMain({contestID, email}){
     setUserAnswers(copy);
   }
 
-  const setRemainTimeHandler = (time) => setRemainTime(contest.period*60-time);
-
   const checkUserAnswers = () => {
     const isFinishAnswerArr = userAnswers.map(ans => ans.answer == '' &&  ans.options.filter(op => op.isTrue == true).length == 0)
-    console.log(userAnswers, isFinishAnswerArr);
-    //transferUserAnswers();
+    if(isFinishAnswerArr.filter(e=>e).length > 0){
+      setModal(
+        <Modal contents={{ 
+          title:"답안 확인", 
+          description: "답안을 입력하지 않은 문제가 있습니다.",
+          btnLabel: "확인"}}
+        />
+      );
+      setTimeout(()=>setModal(''), 3000);
+      return 
+    }
+    setIsEverythingOK(true);
   }
   
   const transferUserAnswers = () => {
     fetch('/api/contest/update/participant',{
       method: "POST",
-      body: JSON.stringify({ 
+      body: JSON.stringify({
+        contestID: contestID, 
         email: email, 
         answers: userAnswers, 
         result: 0 , 
@@ -87,6 +100,7 @@ export default function ContestMain({contestID, email}){
         />
       );
       setTimeout(()=>setModal(''), 3000);
+      setMsg("수고하셨습니다.");
     })
   }
 
@@ -105,7 +119,7 @@ export default function ContestMain({contestID, email}){
           isLoadData
           ? <div>
               <div className='flex justify-end text-red-500'>
-                <Timer limit={contest.period} handler={setRemainTimeHandler}/>
+                <Timer limit={contest.period} handler={setRemainTime}/>
               </div>
               <ShowProblem 
                 problemData={contest.problems[currentPtr]} 
@@ -120,11 +134,7 @@ export default function ContestMain({contestID, email}){
               />
             </div>
           : <div> 
-              {
-                contest.title == "Already joined user"
-                ? <Msg msg="이미 대회에 참가한 사용자입니다."/>
-                : <Msg msg="로딩중..."/>
-              }
+                <Msg msg={msg}/>
             </div>
         }
         </div>
