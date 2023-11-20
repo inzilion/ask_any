@@ -25,6 +25,7 @@ export default function ContestMain({contestID, email}){
   },[])
 
   useEffect(()=>{
+    if(contest.title == "Already joined user") return setMsg("이미 참가하였습니다.");
     if(contest.problems == undefined) return;
     
     const copy = JSON.parse(JSON.stringify(contest.problems));
@@ -46,7 +47,6 @@ export default function ContestMain({contestID, email}){
   useEffect(()=>{
     if(isEverythingOK) transferUserAnswers();
   },[isEverythingOK]);
-
 
   const setUserAnswersHandler = (e, i) => {
     if(e.target.id === "answer")
