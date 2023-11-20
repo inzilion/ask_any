@@ -1,4 +1,4 @@
-export default function Button({id, caption, color, size, handler }){
+export default function Button({ id, caption, color, size, handler }){
   return(
     <>
       <button

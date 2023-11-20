@@ -14,13 +14,12 @@ export default function Timer({limit , handler}){
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTime((prev) => {
-        handler(prev);
-        return prev - 1
-      });
-      }, 1000);
+      setTime(prev => prev - 1);
+    }, 1000);
       return () => clearInterval(timer);
   }, []);
+
+  useEffect(()=>handler(time), [time]);
   
   return (
       <div className="flex gap-5 p-2">
