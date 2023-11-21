@@ -12,7 +12,7 @@ export default function ContestMain({contestID, email}){
   const [ userAnswers, setUserAnswers ] = useState('')
   const [ currentPtr, setCurrentPtr ] = useState(0);
   const [ isLoadData, setIsLoadData ] = useState(false);
-  const [ remainTime, setRemainTime ] = useState(0);
+  const [ remainTime, setRemainTime ] = useState(100);
   const [ modal, setModal ] = useState('');
   const [ isEverythingOK, setIsEverythingOK ] = useState(false);
   const [ msg, setMsg ] = useState('로딩중...')
@@ -76,6 +76,11 @@ export default function ContestMain({contestID, email}){
     setIsEverythingOK(true);
   }
   
+  useEffect(()=>{
+    if(remainTime) return;
+    transferUserAnswers();    
+  }, [remainTime])
+
   const transferUserAnswers = () => {
     fetch('/api/contest/update/participant',{
       method: "POST",

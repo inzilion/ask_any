@@ -7,7 +7,7 @@ export default async function handler(req, res){
   const db = client.db("ASK_ANY");
   const contest = await db.collection('CONTESTS').findOne({_id: new ObjectId(receiveData.contestID)})
 
-  if(/* receiveData.email != "inzilion@gmail.com" && */contest.participants.filter(p=>p.email == receiveData.email).length)
+  if(receiveData.email != "inzilion@gmail.com" && contest.participants.filter(p=>p.email == receiveData.email).length)
     return res.json(JSON.stringify({title: "Already joined user"}));
 
   console.log(await db.collection('CONTESTS').updateOne(
