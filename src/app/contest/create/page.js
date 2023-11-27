@@ -79,7 +79,7 @@ export default function Create(){
     endTime: (copy, e) => copy.endTime = new Date(e.target.value),
     period: (copy, e) => {
       copy.period = e.target.value;
-      copy.endTime = new Date(copy.startTime.getTime() + timeOffset + 1000 * 60 * copy.period);
+      copy.endTime = new Date(new Date(copy.startTime).getTime() + 1000 * 60 * e.target.value);
     },
     create:(copy, e) => {
       copy.problems = selectedProblemList.map(p=>p._id);
