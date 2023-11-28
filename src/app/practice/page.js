@@ -64,7 +64,6 @@ export default function Practice(){
     const description = descriptionArray.reduce((acc, cur)=> acc + cur, '');
     const modalContents = { title:"결과", description: description, btnLabel: "확인" }
     setModal(<Modal contents={modalContents}/>)
-
   }
 
   return(

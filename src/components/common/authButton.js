@@ -10,13 +10,13 @@ export default function AuthButton(){
   const isMobile = (isTrue) => isTrue ? menuItemClassNameMobile : menuItemClassName ;
   const menuItems = [
     {
-      name: "Your Profile",
+      name: "개인설정",
       href: "/profile",
       isMobile: isMobile,
       handler: null,
     },
     {
-      name: "Sign Out",
+      name: "로그아웃",
       href: "#",
       isMobile: isMobile,
       handler: ()=>signOut(),
@@ -62,7 +62,7 @@ export default function AuthButton(){
             className="cursor-pointer text-gray-300  hover:text-white -md px-3 py-3 font-medium"
             onClick={()=>signIn()}
           >
-            Sign In
+            로그인
           </span>
           :
           <Menu as="div"className="border-t border-gray-700 pb-3 pt-4">
