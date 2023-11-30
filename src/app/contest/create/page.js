@@ -31,16 +31,21 @@ export default function Create(){
   const [ modal, setModal ] = useState('');
   const [ problemList, setProblemList ] = useState([]);
   const [ selectedProblemList, setSelectedProblemList] = useState([]);
+  const [ topic, setTopic ] = useState('');
 
   useEffect(() => {
-    fetch("/api/contest/problemList",{ method: "POST",})
+    setProblemList([]);
+    setSelectedProblemList([]);
+    fetch("/api/contest/problemList",{ method: "POST", body: JSON.stringify({category: topic})})
     .then(res=>res.json())
     .then(list=>{
       list = JSON.parse(list);
       list = list.map(e => {e.isSelected = false; return e;})
       setProblemList(list);
     })
-  },[]);
+  },[topic]);
+
+  const setTopicHander = (e) => setTopic(e.target.value);
 
   const setProblemListHandler = (i) => {
     let copy = [...problemList];
@@ -182,7 +187,7 @@ export default function Create(){
         </div>
         
         <div className="w-1/3">
-          <Selection content="주제" {...{ id: 'category',  options: category, handler: ()=>{} }}/>
+          <Selection content="주제" {...{ id: 'category',  options: category, handler: setTopicHander }}/>
         </div>
         
         <div className="flex gap-3 flex justify-between">

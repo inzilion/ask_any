@@ -18,7 +18,9 @@ export default function ContestList({list}){
             return( 
               <tr key={i} className="flex justify-between justify-center p-1 border-b border-blue-300" >
                 <td className="grid justify-items-center w-1/12">{contest.contestType}</td>
-                <td className="grid justify-items-center w-6/12">{isEndContest ? contest.title : <a href={`/contest/${contest._id}`}>{contest.title}</a>}</td>
+                <td className="grid justify-items-center w-6/12">
+                  {isEndContest ? contest.title : <a href={`/contest/${contest._id}?ct=${contest.contestType}`}>{contest.title}</a>}
+                </td>
                 <td className="grid justify-items-center w-1/12">{contest.numOfProblems}</td>
                 <td className="grid justify-items-center w-2/12">{contest.period}분</td>
                 <td className="grid justify-items-center w-1/12">{isEndContest ? <p className='text-rose-500'>종료</p> : <p className='text-green-500'>진행중</p>}</td>

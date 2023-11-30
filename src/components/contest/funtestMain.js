@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react'
 import ShowProblem from './showProblem'
-import ShowBottomButtons from './showBottomButtons'
+import Button from '../common/button'
 import Msg from '../common/msg'
 import Timer from './timer'
 import Modal from '../common/modal'
 
-export default function ContestMain({contestID, email}){
+export default function FuntestMain({contestID, email}){
   const [ contest, setContest ] = useState('')
   const [ userAnswers, setUserAnswers ] = useState('')
   const [ currentPtr, setCurrentPtr ] = useState(0);
@@ -50,7 +50,7 @@ export default function ContestMain({contestID, email}){
 
   const setUserAnswersHandler = (e, i) => {
     if(e.target.id === "answer")
-      return setUserAnswers(answers => { answers[currentPtr].answer = e.target.value.trim(); return answers });
+      return setUserAnswers(answers => { answers[currentPtr].answer = e.target.value; return answers });
     
     const copy = [...userAnswers];
     copy[currentPtr].options.map((op, j) => {
@@ -61,19 +61,49 @@ export default function ContestMain({contestID, email}){
   }
 
   const checkUserAnswers = () => {
-    const isFinishAnswerArr = userAnswers.map(ans => ans.answer == '' &&  ans.options.filter(op => op.isTrue == true).length == 0)
-    if(isFinishAnswerArr.filter(e=>e).length > 0){
+    if(userAnswers[currentPtr].options.filter(el=>el.isTrue).length == 0 && userAnswers[currentPtr].answer ==''){
       setModal(
         <Modal contents={{ 
-          title:"답안 확인", 
-          description: "답안을 입력하지 않은 문제가 있습니다.",
+          title:"오류", 
+          description: "답을 입력하세요.",
           btnLabel: "확인"}}
         />
       );
       setTimeout(()=>setModal(''), 3000);
-      return 
+      return    
     }
-    setIsEverythingOK(true);
+    
+    if(contest.problems[currentPtr].type == "선택형"){ 
+      if(contest.problems[currentPtr].options.filter((op, i) => op.isTrue != userAnswers[currentPtr].options[i].isTrue).length > 0)
+        transferUserAnswers(currentPtr);
+      else {
+        if(currentPtr == contest.problems.length - 1)  transferUserAnswers(currentPtr+1);
+        else                                           setCurrentPtr(currentPtr+1);
+      }
+      return
+    }
+    
+    if(contest.problems[currentPtr].answer != userAnswers[currentPtr].answer)
+      transferUserAnswers(currentPtr);
+    else {
+      if(currentPtr == contest.problems.length - 1)  transferUserAnswers(currentPtr+1);
+      else                                           setCurrentPtr(currentPtr+1);
+    }
+
+
+    // const isFinishAnswerArr = userAnswers.map(ans => ans.answer == '' &&  ans.options.filter(op => op.isTrue == true).length == 0)
+    // if(isFinishAnswerArr.filter(e=>e).length > 0){
+    //   setModal(
+    //     <Modal contents={{ 
+    //       title:"답안 확인", 
+    //       description: "답안을 입력하지 않은 문제가 있습니다.",
+    //       btnLabel: "확인"}}
+    //     />
+    //   );
+    //   setTimeout(()=>setModal(''), 3000);
+    //   return 
+    // }
+    // setIsEverythingOK(true);
   }
   
   useEffect(()=>{
@@ -81,7 +111,7 @@ export default function ContestMain({contestID, email}){
     transferUserAnswers();    
   }, [remainTime])
 
-  const transferUserAnswers = () => {
+  const transferUserAnswers = (current) => {
     fetch('/api/contest/update/participant',{
       method: "POST",
       body: JSON.stringify({
@@ -105,15 +135,10 @@ export default function ContestMain({contestID, email}){
         />
       );
       setTimeout(()=>setModal(''), 3000);
-      setMsg("수고하셨습니다.");
+      setMsg(`총 ${current}문제 맞췄습니다.`);
     })
   }
 
-  const setCurrentPtrHandler = (e) => {
-    if(e.target.id == 'nextButton') setCurrentPtr(currentPtr+1);
-    if(e.target.id == 'preButton') setCurrentPtr(currentPtr-1);
-    if(e.target.id == 'submitButton') checkUserAnswers();
-  }
 
   return(
     <>
@@ -126,18 +151,22 @@ export default function ContestMain({contestID, email}){
               <div className='flex justify-end text-red-500'>
                 <Timer limit={contest.period} handler={setRemainTime}/>
               </div>
-              <ShowProblem 
-                problemData={contest.problems[currentPtr]} 
-                userData={userAnswers[currentPtr]}
-                handler={setUserAnswersHandler}
-                refer = {answerInput}
-              />
-              <ShowBottomButtons 
-                numOfProblems={contest.numOfProblems} 
-                currentPtr={currentPtr} 
-                handler={setCurrentPtrHandler} 
-              />
-            </div>
+              <div className='flex flex-col gap-3'>
+                <ShowProblem 
+                  problemData={contest.problems[currentPtr]} 
+                  userData={userAnswers[currentPtr]}
+                  handler={setUserAnswersHandler}
+                  refer = {answerInput}
+                />
+                <Button 
+                  id="confirm"
+                  caption="확 인"
+                  color="green"
+                  size="w-1/3"
+                  handler={checkUserAnswers}
+                />
+              </div>
+            </div>            
           : <div> 
                 <Msg msg={msg}/>
             </div>
