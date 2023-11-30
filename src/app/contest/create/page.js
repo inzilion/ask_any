@@ -9,6 +9,7 @@ import { contestType } from '@/util/data';
 import Selection from '@/components/common/selection';
 import ContestPeriod from '@/components/contest/contestPeriod';
 import { RemoveScrollBar, noScrollbarsClassName, fullWidthClassName  } from "react-remove-scroll-bar";
+import { category } from "@/util/data";
 
 const timeOffset = 1000*60*60*9;
 const mockData = {
@@ -165,7 +166,9 @@ export default function Create(){
     <div className={fullWidthClassName}>
       {modal}
       <div className="flex gap-5 flex-col m-5">
-        <Selection content="대회 유형" {...selectionData.contestType}/>
+        <div className="w-1/3">
+          <Selection content="대회 유형" {...selectionData.contestType}/>
+        </div>
         <ContestPeriod handler={setContestHandler} startTime={contest.startTime} endTime={contest.endTime} />
 
         <div className="flex items-center">
@@ -178,8 +181,12 @@ export default function Create(){
           />
         </div>
         
+        <div className="w-1/3">
+          <Selection content="주제" {...{ id: 'category',  options: category, handler: ()=>{} }}/>
+        </div>
+        
         <div className="flex gap-3 flex justify-between">
-          <ProblemList isSelected={false} list={problemList} title="모든 문제" handler={setProblemListHandler}/>
+          <ProblemList isSelected={false} list={problemList} title="미선택 문제" handler={setProblemListHandler}/>
           <div className="flex flex-col gap-10 mt-40">
             <FontAwesomeIcon 
               className="hover:cursor-pointer" 
@@ -194,7 +201,7 @@ export default function Create(){
               onClick={moveToOriginList}
             />
           </div>
-          <ProblemList isSelected={true} list={selectedProblemList} title="대회 출제 문제" handler={setSelectedProblemListHandler}/>
+          <ProblemList isSelected={true} list={selectedProblemList} title="출제 문제" handler={setSelectedProblemListHandler}/>
         </div>
         <div className="flex justify-center">
           <button

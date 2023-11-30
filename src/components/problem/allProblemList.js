@@ -30,7 +30,11 @@ export default function AllProblemList({problemList, userData}){
                     : <FontAwesomeIcon style={{color: "red"}} icon={faXmark}/>) : ""}
                 </div>
                 <div className="flex-col">
-                  <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{p.title}</a>
+                  {
+                    session 
+                    ? <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{p.title}</a>
+                    : <p className="text-sm font-semibold leading-6 text-gray-900">{p.title}</p>
+                  }
                   <p className="mt-1 truncate text-xs leading-5 text-gray-500">출제자: {p.author.name}</p>
                 </div>
               </div>
