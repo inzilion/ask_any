@@ -1,7 +1,7 @@
 export default function ContestList({list}){
   return (
     <>
-      <table className="table-auto w-full mt-2">
+      <table className="table-auto w-full">
         <thead>
           <tr className="flex justify-between justify-center p-1 bg-yellow-500">
             <th className="w-1/12">구분</th>

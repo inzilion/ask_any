@@ -24,7 +24,7 @@ const mockData = {
   isFinished: false,
 }
 
-export default function Create(){
+export default function ContestCreate(){
   const { data: session } = useSession();
   const [ contest, setContest ] = useState(mockData);
   const [ modal, setModal ] = useState('');
