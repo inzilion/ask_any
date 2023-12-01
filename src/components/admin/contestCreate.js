@@ -204,18 +204,16 @@ export default function ContestCreate(){
               icon={faArrowAltCircleLeft}
               onClick={moveToOriginList}
             />
+            <button
+              id='create'
+              type="button"
+              onClick={(e)=>createContest(e)}
+              className="rounded-md bg-yellow-500 p-1 text-sm font-medium hover:p-2"
+            >
+              대회만들기
+            </button>
           </div>
           <ProblemList isSelected={true} list={selectedProblemList} title="출제 문제" handler={setSelectedProblemListHandler}/>
-        </div>
-        <div className="flex justify-center">
-          <button
-            id='create'
-            type="button"
-            onClick={(e)=>createContest(e)}
-            className="absolute bottom-5 w-1/2 rounded-md bg-green-800 bg-opacity-50 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-          >
-            대회 만들기
-          </button>
         </div>
       </div>        
     </div>

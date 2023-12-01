@@ -4,7 +4,7 @@ export default function ProblemList({isSelected, list, title, handler})
     <>
       <div className="flex-col w-5/12">
         <div className="flex justify-center">{title}</div>
-        <div className="container border-4 h-1/3 overflow-auto">
+        <div className="container border-4 h-96 overflow-auto">
           {
             list.length > 0 
             ? list.map((p, i) => p.isSelected 

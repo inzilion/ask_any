@@ -83,7 +83,7 @@ export default function FuntestMain({contestID, email}){
       return
     }
     
-    if(contest.problems[currentPtr].answer != userAnswers[currentPtr].answer)
+    if(contest.problems[currentPtr].answer != userAnswers[currentPtr].answer.trim())
       transferUserAnswers(currentPtr);
     else {
       if(currentPtr == contest.problems.length - 1)  transferUserAnswers(currentPtr+1);
@@ -135,7 +135,7 @@ export default function FuntestMain({contestID, email}){
         />
       );
       setTimeout(()=>setModal(''), 3000);
-      setMsg(`총 ${current}문제 맞췄습니다.`);
+      setMsg(`총 ${current}문제 성공.`);
     })
   }
 

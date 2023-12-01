@@ -36,6 +36,11 @@ export default function Navbar(){
       href: "/rank",
       isMobile: isMobile,
     },
+    {
+      name: "관리",
+      href: "/admin",
+      isMobile: isMobile,
+    },
   ];
 
   return(

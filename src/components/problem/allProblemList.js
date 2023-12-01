@@ -30,6 +30,7 @@ export default function AllProblemList({problemList, userData}){
                     : <FontAwesomeIcon style={{color: "red"}} icon={faXmark}/>) : ""}
                 </div>
                 <div className="flex-col">
+                  <span className='text-sm'>{p.category}: </span>
                   {
                     session 
                     ? <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{p.title}</a>
