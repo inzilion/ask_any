@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import ShowProblem from './showProblem'
-import Button from '../common/button'
+import { Button } from '../common/buttons'
 import Msg from '../common/msg'
 import Timer from './timer'
 import Modal from '../common/modal'
@@ -108,7 +108,7 @@ export default function FuntestMain({contestID, email}){
   
   useEffect(()=>{
     if(remainTime) return;
-    transferUserAnswers();    
+    transferUserAnswers(currentPtr);    
   }, [remainTime])
 
   const transferUserAnswers = (current) => {

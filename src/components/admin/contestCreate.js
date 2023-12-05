@@ -22,6 +22,7 @@ const mockData = {
   participants: [],
   numOfParticipants: 0,
   isFinished: false,
+  result:[],
 }
 
 export default function ContestCreate(){
@@ -169,8 +170,8 @@ export default function ContestCreate(){
   return(
     <div>
       {modal}
-      <div className="flex gap-5 flex-col m-5">
-        <div className="w-1/3">
+      <div className="flex gap-2 flex-col m-1">
+        <div className="w-1/3 border-2 border-red-300">
           <Selection content="대회 유형" {...selectionData.contestType}/>
         </div>
         <ContestPeriod handler={setContestHandler} startTime={contest.startTime} endTime={contest.endTime} />
@@ -208,7 +209,7 @@ export default function ContestCreate(){
               id='create'
               type="button"
               onClick={(e)=>createContest(e)}
-              className="rounded-md bg-yellow-500 p-1 text-sm font-medium hover:p-2"
+              className="rounded-md bg-yellow-500 p-2 text-sm font-medium hover:p-3"
             >
               대회만들기
             </button>

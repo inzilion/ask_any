@@ -24,7 +24,7 @@ export default function ContestList({list}){
                 <td className="grid justify-items-center w-1/12">{contest.numOfProblems}</td>
                 <td className="grid justify-items-center w-2/12">{contest.period}분</td>
                 <td className="grid justify-items-center w-1/12">{isEndContest ? <p className='text-rose-500'>종료</p> : <p className='text-green-500'>진행중</p>}</td>
-                <td className="grid justify-items-center w-1/12">{contest.isFinished ? <p className='bg-green-500 text-green-100 h-5'>확인</p> : <p className='bg-rose-500 text-rose-100 h-5'>미채점</p>}</td>
+                <td className="grid justify-items-center w-1/12">{contest.result.length>0 ? <p className='bg-green-500 text-green-100 h-5'>확인</p> : <p className='bg-rose-500 text-rose-100 h-5'>미채점</p>}</td>
               </tr>
             )
           }

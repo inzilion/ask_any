@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react"
 import Modal from "@/components/common/modal";
 import { useSession } from "next-auth/react";
-import Button from '@/components/common/button';
+import Button from '@/components/common/buttons';
 
 export default function Id({params}){
   const { data: session } = useSession();

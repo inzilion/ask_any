@@ -7,7 +7,7 @@ import { useState, useRef } from "react";
 import Modal from '@/components/common/modal';
 import  TextareaAutosize from "react-textarea-autosize";
 import { level, category, type, hidden } from '@/util/data';
-import Button from '@/components/common/button';
+import {Button, RedButton, GreenButton} from '@/components/common/buttons';
 
 const mockData = {
   date: dayjs().toString(),
@@ -110,6 +110,7 @@ export default function Create(){
   }
 
   const [modal, setModal] = useState('');
+
   const createProblem = () => {
     if (!(problemData.title && problemData.description && (problemData.options.length || problemData.answer))){
       setModal(
@@ -148,9 +149,10 @@ export default function Create(){
           btnLabel: "확인"}}
         />
       );
-      setTimeout(()=>setModal(''), 5000);
+      setTimeout(()=>window.location.reload(false), 5000);
     });
-    setProblemData(mockData);
+    //setProblemData(mockData);
+    
   }
   
   if(!session) 

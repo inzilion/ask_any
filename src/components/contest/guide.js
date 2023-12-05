@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Button from '../common/button';
+import { Button } from '../common/buttons';
 
 export default function Guide({handler, contestType}){
   const [ isChecked, setIsChecked ] = useState(false);
