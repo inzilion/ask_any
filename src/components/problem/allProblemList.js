@@ -33,7 +33,7 @@ export default function AllProblemList({problemList, userData}){
                   <span className='text-sm'>{p.category}: </span>
                   {
                     session 
-                    ? <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{p.title}</a>
+                    ? <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{`${p.title}(${p.hidden})`}</a>
                     : <p className="text-sm font-semibold leading-6 text-gray-900">{p.title}</p>
                   }
                   <p className="mt-1 truncate text-xs leading-5 text-gray-500">출제자: {p.author.name}</p>
