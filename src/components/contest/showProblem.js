@@ -4,8 +4,12 @@ export default function ShowProblem({problemData, userData, handler, refer}){
       <div className="flex flex-col divide-y">
         <div className="p-2 text-black-100">제목: {problemData.title}</div>
         <div className="grid justify-items-center">
-          <div className="p-5 text-lg">{problemData.description}</div>
-          {problemData.image ? <img className="w-1/3 pb-5" src={problemData.image}/> : ""}
+        {
+          problemData.category == "초성퀴즈"
+          ? <div className="p-5 text-center text-7xl">{problemData.description}</div>
+          : <div className="p-5 text-center">{problemData.description}</div>
+        }
+        { problemData.image ? <img className="w-1/3 pb-5" src={problemData.image}/> : "" }
         </div>
         {problemData.type =="선택형"
         ? <div className="flex-col flex gap-2 bg-blue-100 p-5">

@@ -55,7 +55,7 @@ export default function Practice(){
       if(i>=numberOfProblems) return '';
       let isRight = false;
       if(p.options.length > 0 && (p.options.length == p.options.map((op, j) => op.isTrue == userOptions[i][j].isTrue).reduce((acc, cur) => acc + cur, 0))) isRight = true;
-      if((p.answer != undefined) && (p.answer == userAnswer[i])) isRight = true;
+      if((p.answer != "") && (p.answer == userAnswer[i])) isRight = true;
       let resultStr = `${i+1}번: ${p.title}:`;
       if(isRight) resultStr += "⭕\n";
       else        resultStr += "❌\n"
@@ -75,8 +75,12 @@ export default function Practice(){
           {problemData ? 
           <div className="flex flex-col divide-y">
             <div className="bg-blue-100 p-2 text-black-100">{ptr+1}번 문제</div>
-            <div className="p-2 text-black-100">제목: {problemData.title}</div>
-            <div className="p-3">{problemData.description}</div>
+            <div className="p-2 text-black-100 text-center">제목: {problemData.title}</div>
+            {
+              problemData.category == "초성퀴즈"
+              ? <div className="p-3 text-center text-7xl">{problemData.description}</div>
+              : <div className="p-3 text-center">{problemData.description}</div>
+            }
             <div className="flex justify-center">
               {problemData.image ? <img className="w-1/3" src={problemData.image}/> : ""}
             </div>
@@ -97,12 +101,14 @@ export default function Practice(){
                   </div>
                 )}
               </div>
-            : <input
-                id='answer'
-                placeholder="정답을 입력하세요."
-                className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                onChange={(e)=>{setUserAnswerHandler(e)}}
-              />
+            : <div className="flex justify-center">
+                <input
+                  id='answer'
+                  placeholder="정답을 입력하세요."
+                  className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  onChange={(e)=>{setUserAnswerHandler(e)}}
+                />
+              </div>
             }
             <div className="flex justify-center p-3 gap-3">
               {

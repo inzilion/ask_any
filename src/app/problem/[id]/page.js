@@ -109,8 +109,12 @@ export default function Id({params}){
         : ""
         : ""
       }        
-      <div className="p-3 text-black-100">제목: {problemData.title}</div>
-      <div className="p-3">{problemData.description}</div>
+      <div className="p-3 text-center text-black-100">제목: {problemData.title}</div>
+      {
+        problemData.category == "초성퀴즈"
+        ? <div className="p-3 text-center text-7xl">{problemData.description}</div>
+        : <div className="p-3 text-center">{problemData.description}</div>
+      }
       <div className="flex justify-center">
         {problemData.image ? <img className="w-1/2 p-2" src={problemData.image}/> : ""}
       </div>

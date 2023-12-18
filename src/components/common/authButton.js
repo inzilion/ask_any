@@ -38,8 +38,8 @@ export default function AuthButton(){
           :
           <Menu as="div" className="relative">
             <Menu.Button className="relative flex items-center cursor-pointer ">
-              <div className="text-gray-400 mx-2">{session.user.name}</div>
-              <Image src={session.user.image} width={40} height={40} alt="no Photo"/>
+              <div className="text-gray-400 mx-2">{session.user?.name}</div>
+              {/* <Image src={session.user?.image} width={40} height={40} alt="no Photo"/> */}
             </Menu.Button>
             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               { 
@@ -67,8 +67,8 @@ export default function AuthButton(){
           :
           <Menu as="div"className="border-t border-gray-700 pb-3 pt-4">
             <Menu.Button className="flex flex-col px-5">
-              <div className="text-base font-medium leading-none text-white">{session?.user.name}</div>
-              <div className="text-sm font-medium leading-none text-gray-400">{session?.user.email}</div>
+              <div className="text-base font-medium leading-none text-white">{session.user?.name}</div>
+              <div className="text-sm font-medium leading-none text-gray-400">{session.user?.email}</div>
             </Menu.Button>
             <Menu.Items className="mt-3 space-y-1 px-2">
             { 

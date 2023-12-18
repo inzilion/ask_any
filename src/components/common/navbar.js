@@ -17,11 +17,6 @@ export default function Navbar(){
       isMobile: isMobile,
     },
     {
-      name: "문제만들기",
-      href: "/problem/create",
-      isMobile: isMobile,
-    },
-    {
       name: "연습",
       href: "/practice",
       isMobile: isMobile,

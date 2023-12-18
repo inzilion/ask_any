@@ -149,7 +149,7 @@ export default function Create(){
           btnLabel: "확인"}}
         />
       );
-      setTimeout(()=>window.location.reload(false), 5000);
+      setTimeout(()=>setModal(''), 2000);
     });
     //setProblemData(mockData);
     

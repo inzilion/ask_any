@@ -21,23 +21,22 @@ export default function Profile(){
     <>
       { modal }      
       { userData ?
-      <div>
-        <div className='flex-col flex gap-4 p-5'>
-          <div className='flex gap-2'>
+      
+      <div className='flex justify-center'>
+        <div className='flex justify-center flex-col gap-4 p-5 w-1/2'>
+          <div className='flex gap-2 border-b-2'>
             <div>이름:</div>
             <input type='text' defaultValue={userData.name}
-              className='border focus-visible' onChange={(e)=>setUserName(e.target.value)}/>
+              className='focus-visible' onChange={(e)=>setUserName(e.target.value)}/>
           </div>
-          <div className='flex gap-2'>
-            <div>email:</div><div>{userData.email}</div>
+          <div className='flex gap-2 border-b-2'>
+            <div>학번:</div><div>{userData.email}</div>
           </div>
-          <div className='flex gap-2'>
+          <div className='flex gap-2 border-b-2'>
             <div>하고싶은말:</div>
             <input type='text' defaultValue={userData.memo}
-              className='border' onChange={(e)=>setUserMemo(e.target.value.slice(0,25))}/>
+              className='' onChange={(e)=>setUserMemo(e.target.value.slice(0,25))}/>
           </div>
-        </div>
-        <div className='flex justify-center'>
           <button
             type='button'
             className='rounded-md bg-red-500 bg-opacity-20 px-4 py-2 text-sm font-medium text-black hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
