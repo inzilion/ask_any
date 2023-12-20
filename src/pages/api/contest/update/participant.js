@@ -5,7 +5,7 @@ export default async function handler(req, res){
   const receiveData = JSON.parse(req.body);
   const contestID = receiveData.contestID;
   delete receiveData.contestID;
-  console.log(receiveData)
+  //console.log(receiveData)
   const db = client.db('ASK_ANY');
   
   let result = await db.collection('CONTESTS').updateOne(

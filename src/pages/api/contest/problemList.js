@@ -2,7 +2,7 @@ import client from "@/util/database";
 
 export default async function handler(req, res){
   const category = JSON.parse(req.body).category;
-  console.log(category)
+  //console.log(category)
   const db = client.db("ASK_ANY");
   let list = [];
   if (category =="전체" || category == "")

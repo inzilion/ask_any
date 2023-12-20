@@ -15,6 +15,6 @@ export default async function handler(req, res){
       el.participants = false;
     return el
     })
-    console.log(modifyedList);
+    //console.log(modifyedList);
   return res.json(JSON.stringify(modifyedList));
 }
