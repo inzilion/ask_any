@@ -1,5 +1,4 @@
 'use client'
-import Image from "next/image";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Menu } from '@headlessui/react';
 

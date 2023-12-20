@@ -98,9 +98,8 @@ export default function Id({params}){
               </a>
             </div>
             <div className='grid justify-items-end py-2'>
-              <a href="#"
+              <a href={`/api/problem/remove?_id=${problemData._id}`}
                 className='rounded-md bg-red-300 px-4 py-2 text-sm font-medium text-black  hover:bg-red-500 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75'
-                onClick={()=>{}}
               >
                 문제삭제
               </a>
@@ -116,7 +115,7 @@ export default function Id({params}){
         : <div className="p-3 text-center">{problemData.description}</div>
       }
       <div className="flex justify-center">
-        {problemData.image ? <img className="w-1/2 p-2" src={problemData.image}/> : ""}
+        {problemData.image ? <img className="border w-1/2 m-2" src={problemData.image}/> : ""}
       </div>
       { problemData.type == "선택형" 
       ? <div className="flex-col flex gap-2 bg-blue-100 p-5">

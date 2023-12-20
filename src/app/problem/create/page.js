@@ -192,7 +192,7 @@ export default function Create(){
           </TextareaAutosize>
         </div>
         <div className='flex-col grid justify-items-center gap-2'>
-          <img src={problemData.image} width="50%"/>
+          <img src={problemData.image} width="50%" className="border"/>
           <input id="image" type="file" onChange={changeState} className='hidden'/>
           <label htmlFor="image" className='bg-blue-900 text-white hover:bg-blue-500 hover:text-white rounded-md px-3 py-2 text-sm font-medium'>이미지 파일 선택</label>
         </div>

@@ -13,14 +13,18 @@ export default function AllProblemList({problemList, userData}){
 
   useEffect(() => setCurrentList(problemList.slice(currentPage*10-10, currentPage*10)), [currentPage])
 
-  const setCurrentPageHandler = (e, i) =>  setCurrentPage(i);
+  const setCurrentPageHandler = (e, i) => {
+    i = i<1 ? 1 : i;
+    i = i>parseInt(problemList.length/10)+1 ? parseInt(problemList.length/10)+1 : i;
+    setCurrentPage(i<1?1:i)
+  };
   
   return (
     <>
       <div>
         <ul className="divide-y divide-gray-300 p-2">
         {currentList.map((p, i) => {
-          if(p.hidden == undefined || p.hidden == "공개" || session?.user?.email == "inzilion@gmail.com") 
+          // if(p.hidden == undefined || p.hidden == "공개" || session?.user?.email == "inzilion@gmail.com") 
           return (
             <li key={i} className="flex justify-between gap-x-6 py-2">
               <div className="flex min-w-0 gap-x-4 pl-3">
@@ -29,13 +33,15 @@ export default function AllProblemList({problemList, userData}){
                     : userData.problems[p._id]?.isSolved ? <FontAwesomeIcon style={{color: "green"}} icon={faCheck}/> 
                     : <FontAwesomeIcon style={{color: "red"}} icon={faXmark}/>) : ""}
                 </div>
-                <div className="flex-col">
-                  <span className='text-sm'>{p.category}: </span>
-                  {
-                    session 
-                    ? <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{`${p.title}(${p.hidden})`}</a>
-                    : <p className="text-sm font-semibold leading-6 text-gray-900">{p.title}</p>
-                  }
+                <div className="flex flex-col">
+                  <div className='flex items-center'>
+                    <span className='text-sm'>{`${p.category}:`}&nbsp; </span>
+                    {
+                      (session && p.hidden == "공개") || session?.user?.email == "inzilion@gmail.com" 
+                      ? <a href={`/problem/${p._id.toString()}`} className="text-sm font-semibold leading-6 text-gray-900">{`${p.title}(${p.hidden})`}</a>
+                      : <p className="text-sm font-semibold leading-6 text-gray-900">{`${p.title}(${p.hidden})`}</p>
+                    }
+                  </div>
                   <p className="mt-1 truncate text-xs leading-5 text-gray-500">출제자: {p.author.name}</p>
                 </div>
               </div>

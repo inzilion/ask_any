@@ -11,7 +11,7 @@ export default function Pagination({numOfElements, currentPage, handler}) {
       <div className="flex flex-1 items-center justify-between">
         <div>
           <p className="text-sm text-gray-700">
-            전체 문제수 : {numOfElements}문제
+            총 문제수 : {numOfElements}
           </p>
         </div>
         <div>
@@ -29,21 +29,23 @@ export default function Pagination({numOfElements, currentPage, handler}) {
               <ChevronLeftIcon className="h-5 w-5" onClick={(e)=>handler(e, currentPage-1)}/>
             </button>
             {
-              pageArray.map((e, i)=>
-                (i+1)==currentPage
-                ? <button key={i}
-                    className="cursor-pointer inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={(e)=>handler(e, i+1)}
-                  >
-                    {i+1}
-                  </button>
-                : <button key={i}
-                    className="cursor-pointer inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                    onClick={(e)=>handler(e, i+1)}
-                  >
-                    {i+1}
-                  </button>  
-              )
+              pageArray.map((e, i)=>{
+                if(parseInt(currentPage/10)*10 <= i+1 && i+1 <= (parseInt(currentPage/10)+1)*10){
+                return (i+1)==currentPage
+                  ? <button key={i}
+                      className="cursor-pointer inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      onClick={(e)=>handler(e, i+1)}
+                    >
+                      {i+1}
+                    </button>
+                  : <button key={i}
+                      className="cursor-pointer inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
+                      onClick={(e)=>handler(e, i+1)}
+                    >
+                      {i+1}
+                    </button>  
+                }
+              })
             }
 
             {/* <div className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0">

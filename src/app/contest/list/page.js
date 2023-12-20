@@ -9,7 +9,9 @@ export default function Contest(){
   useEffect(()=>{
     fetch("/api/contest/contestList", { method: "POST" })
     .then(res => res.json())
-    .then(list => setContestList(JSON.parse(list)))
+    .then(list => {
+      setContestList(JSON.parse(list));
+    })
   }, [])
 
 

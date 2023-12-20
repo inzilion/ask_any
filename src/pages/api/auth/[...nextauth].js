@@ -19,7 +19,7 @@ export const authOptions = {
     // ...add more providers here
     CredentialsProvider({
       //1. 로그인페이지 폼 자동생성해주는 코드 
-      name: "credentials",
+      name: "부천정산고",
         credentials: {
           email: { label: "학번", type: "text" },
           password: { label: "비번", type: "password" },

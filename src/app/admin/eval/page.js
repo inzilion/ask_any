@@ -22,7 +22,6 @@ export default async function Eval({searchParams}){
     })
     evalTable[i+1].push(evalTable[i+1].filter(el=>el).length-1);
   })
-  console.log(evalTable);
   
   return(
     <>
@@ -30,10 +29,19 @@ export default async function Eval({searchParams}){
         <tbody className="divide-y divide-gray-300">
         {
           evalTable.map((row, i)=>
+            row.length>12
+            ?
             <tr key={i}>
               { i==0
-              ? row.map((el, j)=><td key={j} className="bg-yellow-500 font-bold">{el}</td>)
-              : row.map((el, j)=><td key={j}>{typeof(el)=='boolean'? el ? "⭕":"❌" : typeof(el)=="number" ? `${el}개` : el.slice(0,6)}</td>)
+              ? row.map((el, j)=>j==0 || j==row.length-1 ? <td key={j} className="bg-yellow-500 font-bold">{el}</td>:"")
+              : row.map((el, j)=>j==0 || j==row.length-1 ? <td key={j}>{typeof(el)=='boolean'? el ? "⭕":"❌" : typeof(el)=="number" ? `${el}개` : el.slice(0,6)}</td>:"")
+              }
+            </tr>
+            :
+            <tr key={i}>
+              { i==0
+              ? <td key={j} className="bg-yellow-500 font-bold">{el}</td>
+              : <td key={j}>{typeof(el)=='boolean'? el ? "⭕":"❌" : typeof(el)=="number" ? `${el}개` : el.slice(0,6)}</td>
               }
             </tr>
           )

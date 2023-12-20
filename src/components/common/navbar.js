@@ -26,11 +26,11 @@ export default function Navbar(){
       href: "/contest/list",
       isMobile: isMobile,
     },
-    {
-      name: "순위",
-      href: "/rank",
-      isMobile: isMobile,
-    },
+    // {
+    //   name: "순위",
+    //   href: "/rank",
+    //   isMobile: isMobile,
+    // },
     {
       name: "관리",
       href: "/admin",

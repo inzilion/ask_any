@@ -32,6 +32,7 @@ export default function ContestCreate(){
   const [ problemList, setProblemList ] = useState([]);
   const [ selectedProblemList, setSelectedProblemList] = useState([]);
   const [ topic, setTopic ] = useState('');
+  const [ selectedProblemNum , setSelectedProblemNum ] = useState(0);
 
   useEffect(() => {
     setProblemList([]);
@@ -44,6 +45,8 @@ export default function ContestCreate(){
       setProblemList(list);
     })
   },[topic]);
+
+  useEffect(() =>{ setSelectedProblemNum(selectedProblemList.length)}, [selectedProblemList])
 
   const setTopicHander = (e) => setTopic(e.target.value);
 
@@ -214,7 +217,7 @@ export default function ContestCreate(){
               대회만들기
             </button>
           </div>
-          <ProblemList isSelected={true} list={selectedProblemList} title="출제 문제" handler={setSelectedProblemListHandler}/>
+          <ProblemList isSelected={true} list={selectedProblemList} title={`출제 문제(${selectedProblemNum})`}handler={setSelectedProblemListHandler}/>
         </div>
       </div>        
     </div>
