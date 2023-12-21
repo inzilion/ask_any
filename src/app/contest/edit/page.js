@@ -1,14 +1,14 @@
 'use client'
+
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Modal from '@/components/common/modal';
 import ProblemList from "@/components/contest/problemList";
 import { faArrowAltCircleRight, faArrowAltCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { contestType } from '@/util/data';
+import { contestType, category } from '@/util/data';
 import Selection from '@/components/common/selection';
 import ContestPeriod from '@/components/contest/contestPeriod';
-import { category } from "@/util/data";
 
 const timeOffset = 1000*60*60*9;
 const mockData = {
@@ -25,7 +25,7 @@ const mockData = {
   result:[],
 }
 
-export default function ContestCreate(){
+export default function Edit({searchParams}){
   const { data: session } = useSession();
   const [ contest, setContest ] = useState(mockData);
   const [ modal, setModal ] = useState('');
@@ -33,6 +33,27 @@ export default function ContestCreate(){
   const [ selectedProblemList, setSelectedProblemList] = useState([]);
   const [ topic, setTopic ] = useState('');
   const [ selectedProblemNum , setSelectedProblemNum ] = useState(0);
+
+  useEffect(() => {
+    fetch("/api/contest/getForEdit",{ method: "POST", body: JSON.stringify({contestID: searchParams.contestID})})
+    .then(res=>res.json())
+    .then(contest=>{
+      let copy = JSON.parse(contest);
+      copy.startTime = new Date(copy.startTime);
+      copy.endTime = new Date(copy.endTime);
+      setContest(copy);
+    })
+  }, [])
+
+  useEffect(()=>{
+    if(!problemList.length) return;
+    let select = (JSON.parse(JSON.stringify(contest.problems.map(pid => problemList.filter(p => pid==p._id)))));
+    setSelectedProblemList(select)
+  },[problemList]);
+
+  useEffect(()=>{    
+    console.log(selectedProblemList); 
+  },[selectedProblemList])
 
   useEffect(() => {
     setProblemList([]);
@@ -44,6 +65,7 @@ export default function ContestCreate(){
       list = list.map(e => {e.isSelected = false; return e;})
       setProblemList(list);
     })
+
   },[topic]);
 
   useEffect(() =>{ setSelectedProblemNum(selectedProblemList.length)}, [selectedProblemList])
@@ -131,27 +153,27 @@ export default function ContestCreate(){
     setContestHandler(e);
   }
 
-  useEffect(()=>{
-  if(!contest.problems.length) return;
+  // useEffect(()=>{
+  //   if(!contest.problems.length) return;
 
-  fetch('/api/contest/create', {
-      method: 'POST',
-      body: JSON.stringify(contest),
-    })
-    .then(res=>res.json())
-    .then(json=>{
-      setModal(
-        <Modal contents={{ 
-          title:"등록완료", 
-          description: "대회 등록이 완료되었습니다.",
-          btnLabel: "확인"}}
-        />
-      );
-      setTimeout(()=>setModal(''), 3000);
-    });
-    setContest(mockData);
+  //   fetch('/api/contest/create', {
+  //       method: 'POST',
+  //       body: JSON.stringify(contest),
+  //     })
+  //     .then(res=>res.json())
+  //     .then(json=>{
+  //       setModal(
+  //         <Modal contents={{ 
+  //           title:"등록완료", 
+  //           description: "대회 등록이 완료되었습니다.",
+  //           btnLabel: "확인"}}
+  //         />
+  //       );
+  //       setTimeout(()=>setModal(''), 3000);
+  //     });
+  //     setContest(mockData);
 
-  }, [contest.problems])
+  //   }, [contest.problems])
 
   
   const selectionData = {
@@ -159,6 +181,7 @@ export default function ContestCreate(){
       id: 'contestType',
       options: contestType,
       handler: setContestHandler,
+      value: contest.contestType,
     },
   }
 
@@ -177,7 +200,7 @@ export default function ContestCreate(){
         <div className="w-1/3 border-2 border-red-300">
           <Selection content="대회 유형" {...selectionData.contestType}/>
         </div>
-        <ContestPeriod handler={setContestHandler} startTime={contest.startTime} period={10} endTime={contest.endTime} />
+        <ContestPeriod handler={setContestHandler} startTime={contest.startTime} period={contest.period} endTime={contest.endTime} />
 
         <div className="flex items-center">
           <label>제목 : </label>
@@ -186,6 +209,7 @@ export default function ContestCreate(){
             placeholder="대회 제목을 입력하세요"
             className="w-1/2 rounded-md border-0 py-1.5 pl-3 pr-20 ml-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             onChange={(e)=>setContestHandler(e)}
+            defaultValue={contest.title}
           />
         </div>
         
@@ -217,7 +241,10 @@ export default function ContestCreate(){
               대회만들기
             </button>
           </div>
-          <ProblemList isSelected={true} list={selectedProblemList} title={`출제 문제(${selectedProblemNum})`}handler={setSelectedProblemListHandler}/>
+          { selectedProblemNum > 0 
+            ?<ProblemList isSelected={true} list={selectedProblemList} title={`출제 문제(${selectedProblemNum})`}handler={setSelectedProblemListHandler}/>
+            :<ProblemList isSelected={true} list={[]} title={`출제 문제(${selectedProblemNum})`}handler={setSelectedProblemListHandler}/>
+          }
         </div>
       </div>        
     </div>

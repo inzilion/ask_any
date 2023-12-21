@@ -26,10 +26,10 @@ export default function ProblemList(){
         ? problemList.map((p, i) => 
           <div className='border-b-2 pt-1' key={i}>
               <Link href={`/problem/${p._id}`}> {`${p.title}(${p.description}):`}</Link>
-              <span> {
+              <span className='font-bold'> {
                 p.answer == ''
                 ? (p.options.filter(op=>op.isTrue))[0].content
-                : p.answer
+                : `${p.answer}(단답형)`
               }
               </span>
           </div>)

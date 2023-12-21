@@ -29,21 +29,16 @@ export default function ContestList({list}){
                 <td className="grid justify-items-center w-1/12">
                   <a href={`/admin/eval?contestID=${contest._id}`}>
                     {contest.isFinished 
-                    ? <p className='bg-green-500 text-green-100 h-5'>확인</p> 
-                    : <p className='bg-rose-500 text-rose-100 h-5'>미채점</p>}
+                    ? <p className='bg-green-500 text-green-100 h-5 px-1 rounded'>확인</p> 
+                    : <p className='bg-rose-500 text-rose-100 h-5 px-1 rounded'>채 점</p>}
                   </a>
                 </td>
-                <td className="grid justify-items-center w-1/12 text-red-500 cursor-pointer">
-                  <span onClick={()=>{
-                    fetch(`/api/contest/delete`, {
-                      method: 'POST',
-                      body: JSON.stringify({contestID: contest._id}),
-                    })
-                    .then(res=>res.json())
-                    .then(json=>window.location.reload(false))
-                  }}>
-                    삭제
-                  </span>
+                <td className="grid justify-items-center w-1/12 cursor-pointer rounded">
+                <a href={`/contest/edit?contestID=${contest._id}`}>
+                  <p className="bg-rose-500 text-rose-100 h-5 px-1 rounded">
+                    수 정
+                  </p>
+                </a>
                 </td>
               </tr>
             )

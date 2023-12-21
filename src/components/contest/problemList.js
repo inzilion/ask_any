@@ -14,6 +14,12 @@ export default function ProblemList({isSelected, list, title, handler})
                   onClick={()=>{handler(i)}}
                 >
                   {p.category}: {p.title}
+                    <span className='font-bold'> {
+                      p.answer == ''
+                      ? (p.options.filter(op=>op.isTrue))[0].content
+                      : `${p.answer}(단답형)`
+                    }
+                    </span>
                 </div> 
               :
                 <div 
@@ -22,6 +28,12 @@ export default function ProblemList({isSelected, list, title, handler})
                   onClick={()=>{handler(i)}}
                 >
                   {p.category}: {p.title}
+                  <span className='font-bold'> {
+                      p.answer == ''
+                      ? (p.options.filter(op=>op.isTrue))[0].content
+                      : `${p.answer}(단답형)`
+                    }
+                    </span>
                 </div>) 
             : ""
           }

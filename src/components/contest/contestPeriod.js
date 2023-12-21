@@ -1,4 +1,4 @@
-export default function ContestPeriod({handler, startTime, endTime}){
+export default function ContestPeriod({handler, startTime, period, endTime}){
   return(
     <>
       <div className="flex items-center gap-3">
@@ -6,7 +6,7 @@ export default function ContestPeriod({handler, startTime, endTime}){
         <input
           id='startTime' 
           type="datetime-local" 
-          defaultValue={startTime.toISOString().slice(0, 19)}
+          defaultValue={startTime?.toISOString().slice(0, 19)}
           onChange={(e)=>handler(e)}
         />
       </div>
@@ -16,7 +16,7 @@ export default function ContestPeriod({handler, startTime, endTime}){
           <input
             id='period' 
             type="number" 
-            defaultValue={10}
+            defaultValue={period}
             min={1} 
             className="text-right bg-red-200 w-1/4"
             onChange={(e)=>handler(e)}
@@ -29,7 +29,7 @@ export default function ContestPeriod({handler, startTime, endTime}){
         <input 
           id='endTime'
           type="datetime-local" 
-          value={endTime.toISOString().slice(0, 19)}
+          value={endTime?.toISOString().slice(0, 19)}
           onChange={(e)=>handler(e)}
         />
       </div>
