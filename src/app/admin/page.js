@@ -8,11 +8,13 @@ import { ADMINS } from '@/util/data';
 import { Tab } from '@headlessui/react';
 import ContestCreate from '@/components/admin/contestCreate';
 import Create from '../problem/create/page';
+import ProblemList from '@/components/admin/problemList';
 
 export default function Admin(){
   const [ contestList, setContestList ] = useState([]);
   const { data: session } = useSession();
   const mockData = {
+    '문제관리': ()=><ProblemList/>,
     '문제만들기': ()=><Create/>,
     '대회만들기': ()=><ContestCreate/>,
     '대회관리': ()=><ContestList list={contestList}/>,

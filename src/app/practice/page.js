@@ -14,6 +14,8 @@ export default function Practice(){
   const [ ready, setReady ] = useState(false);
   const [ numberOfProblems, setNumberOfProblems ] = useState(5);
 
+  const inputRef = useRef();
+
   const getProblems = () => {
     fetch('/api/problem/practice', { 
       method: 'POST', 
@@ -32,7 +34,13 @@ export default function Practice(){
     setUserOptions(copyOptions.map(p=>p.map(op=>{op.isTrue = false; return op;})));
     }, [problemList])
 
-  useEffect(()=> ptr < numberOfProblems ? setProblemData(problemList[ptr]) : "", [ptr]);
+  useEffect(()=> {
+    ptr < numberOfProblems ? setProblemData(problemList[ptr]) : "";
+    if(inputRef.current) {
+      inputRef.current.value = userAnswer[ptr];
+    // console.log(inputRef.current, userAnswer)
+    }
+  }, [ptr]);
   
   const setUserOptionsHandler = (e, i) => {
     const copy = [...userOptions];
@@ -103,6 +111,7 @@ export default function Practice(){
               </div>
             : <div className="flex justify-center">
                 <input
+                  ref={inputRef}
                   id='answer'
                   placeholder="정답을 입력하세요."
                   className="w-1/2 rounded-md border-2 py-1.5 pl-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
